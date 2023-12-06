@@ -1,0 +1,6 @@
+.dummy{
+	color : blue;
+}
+.li.slds-path__item.slds-is-complete{
+	max-width:140px;
+}

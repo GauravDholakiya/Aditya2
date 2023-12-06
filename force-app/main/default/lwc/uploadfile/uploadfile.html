@@ -1,0 +1,112 @@
+<template>
+  <div
+    class="slds-box slds-p-top_small"
+    style="background-color: white; position: relative"
+  >
+    <template if:true={showSpinner}>
+      <lightning-spinner
+        alternative-text="Loading"
+        size="medium"
+        class="spinnerClass"
+      ></lightning-spinner>
+    </template>
+    <div class="slds-text-heading_medium">Upload The Files</div>
+    <br />
+    <lightning-input
+      type="file"
+      label="Attachment"
+      onchange={handleFileUploaded}
+      multiple
+    >
+    </lightning-input>
+    <template if:true={check}>
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-01"
+        aria-modal="true"
+        aria-describedby="modal-content-id-1"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button
+              class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+              title="Close"
+              onclick={handleCloseModal}
+            >
+              <lightning-icon
+                icon-name="utility:close"
+                alternative-text="close"
+                variant="inverse"
+                size="small"
+                onclick={handleCloseModal}
+              ></lightning-icon>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2
+              id="modal-heading-01"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Set File Properties
+            </h2>
+          </header>
+          <div
+            class="slds-modal__content slds-var-p-around_medium"
+            id="modal-content-id-1"
+            style="overflow: visible"
+          >
+            <div class="slds-card slds-var-p-around_small">
+              <template
+                for:each={filesData}
+                for:item="imgName"
+                for:index="index"
+              >
+                <lightning-input
+                  label="File Name"
+                  type="text"
+                  value={imgName.fileName}
+                  key={imgName.fileName}
+                >
+                </lightning-input>
+                <lightning-combobox
+                  name="types"
+                  label="Document Type"
+                  key={imgName.fileName}
+                  id={index}
+                  placeholder="Select File Type"
+                  options={documentTypelist.data.values}
+                  onchange={handleFileTypeSelectionChange}
+                  required
+                >
+                </lightning-combobox>
+              </template>
+            </div>
+          </div>
+          <footer class="slds-modal__footer">
+            <button
+              class="slds-button slds-button_neutral"
+              onclick={handleCloseModal}
+              title="Cancel"
+            >
+              Cancel
+            </button>
+            <lightning-button
+              variant="brand"
+              label="Upload Files"
+              onclick={uploadFiles}
+              class="slds-m-top_medium"
+            >
+            </lightning-button>
+          </footer>
+        </div>
+      </section>
+
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <br />
+
+    <lightning-datatable key-field="id" data={filelist} columns={columns}>
+    </lightning-datatable>
+  </div>
+</template>

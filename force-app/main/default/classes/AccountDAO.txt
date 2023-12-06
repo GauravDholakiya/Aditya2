@@ -1,0 +1,2253 @@
+public without sharing class AccountDAO implements IAccountDAO{
+    
+    public Interface IAccountDAO 
+    {
+        List<Account> getAccountWithPromotions(List<ID> accountIDs , Set<Id> promotionIdList);
+        List<Account> getActivePromotionsForAccount(List<ID> accountIDs);
+        Map<Id, Account> getAccountMapByIds(Set<Id> accountIds);
+        List<Account> getListOfAccountsByRecordTypeIdAndAccountPhone(Set<String> accountPhone, Id recordTypeId,
+            Set<Id> accountId, Set<String> accountCompanyEmail);
+        List<Account> getAccountsByTaxIdLast4DigitsAndZip(String last4, String zip);
+        List<Account> getAccountsByRecordTypeCompanyEmailAndPostalCode(String companyEmailAddress,
+            String postalCodeUK, String recordTypeDeveloperName);
+        Map<Id,Account> getAccountsByIds(Set<Id> ids);
+        List<Account> getAccountsSearchLookup(String searchNameString, String searchCity,String searchState, 
+                                            String searchPostalCode, String searchPhone, String searchClientStatus, 
+                                            String searchCountry, String searchNumber);
+        List<Account> getAccountsSearchLookupForPGM(String searchNameString, String searchCity, String searchState,
+            String searchPostalCode, String searchPhone, String searchClientStatus, String searchCountry, String searchNumber,
+            String personAccountClause);
+        Account getAccountById(String Id);
+        List<Account> getChildAccountsByParent(Set<Id> parentAccountIds);
+        List<Account> retrieveFreeStandingWarrantyAccountsBySchedulingTypeAndCompany(Set<String> schedulingTypeSet, String companyName);
+        List<Account> getAccountByRecordTypeAndName(Id recordTypeId , String accountName);
+        Account getAccountByUserId(Id userId);
+        Account getAccountCountry(ID accountId);
+        List<Account> insertAccounts(List<Account> accounts);
+        List<Account> getAccountList(Set<Id> setAccountRequestId);
+        List<Account> updateAccounts(List<Account> accounts);
+        List<Account> getMaxAccountNumberAccounts(String cidMaxNumber);
+        List<Account> getInfoByAccountId(List<Id> accountIds);
+        Account getAccountInfoById(Id AccountID);
+        List<Account> adjMgrGetEmail(Set<String> inspectioncompany);
+        List<Account> cpmGetQA(Set<String> inpAcId);
+        List<Account> getAccountsByName(String name);
+        List<Account> getWarehouseAccounts(String recordTypeDeveloperName, String country, String status);
+        Map<Id, Account> getAccountMapByRecordTypeId(String recordTypeId);
+        List<Account> getAccountsByType(String recordTypeId, List<String> types);
+        List<Account> getPersonAccountByUserAndRecordTypeDeveloperName(Id userId, String developerName);
+        List<Account> getAccountsWhereThisAccountIsSetAsAgent(Id agentContactId);
+        List<Account> getAccountsByWritingCompanyCodes(Set<String> writingCompanyCodes);
+        Id getAccountIdFromUser(User currentUser);
+        List<Account> getAgentInfoByAccountId(List<Id> listOfAccountIDs);
+        List<Account> getParentDealerSearchRecords(Id accountId, String searchKey);
+        List<Account> getWarehouseAccountsByRecordTypeIdStatusAndCountry(String recordTypeId, String country, String status);
+        List<Account> getAccountsByNameOrAccountNumberWithRecordType(String name, String accountNumber, String recordType);
+        List<Account> getFSWNAAutoAccountByAccountIdSet(Set<Id> accountIdSet);
+        Account getPersonAccountDetailById(Id accountId);
+        Id getAccountAgent(Account accountWAgent);
+        Decimal getAccountAgentRAC(Account accountWAgent);
+        Decimal getAccountMasterAgentPercent(Account accountWAgent);
+        Decimal getAccountSuperAgentPercent(Account accountWAgent);
+        Map<Id,Account> getAccountMapByRecordTypeAndId(String recordTypeDeveloperName, Set<Id> accountIds);
+        Map<Id, Account> getMapOfAccountByIds(Set<Id> setOfAccountIds);
+        List<Account> getListOfPersonAccountsByBrandingAndEmailAddress (
+            String customerBranding, String customerEmail, String lastName, Id recordTypeId);
+        List<Account> getAccountsForNPDPCheck(Set<Id> accountIds);
+        List<Account> getAccountsSearchLookup(
+            String searchNameString, String searchCity, String searchState, String searchPostalCode, String searchPhone, 
+            String searchClientStatus, String searchCountry, String searchNumber, String personAccountClause
+        );
+        List<Account> getAccountsSearchLookupForEU(Set<Id> recordTypeids, String searchNameString, String searchCity, 
+            String searchState, String searchPostalCode, String searchPhone, String searchClientStatus, String searchCountry,
+            String searchNumber, String personAccountClause);
+        List<Account> getAccountsForAgentId(Id agentContactId);
+        List<Account> getAccountsWhereThisAccountIsSetAsMasterSuperAgent(Id agentContactId);
+        Account getDealerQualifierBrandByAccountID (Id accountId);
+        Branding__c getBrandingByAccountBrand();
+        List<Branding__c> getListOfBrandingByAccountBrand();
+        Account getRelatedContractsByPersonAccountId (Id personAccountId, Id quoteId);
+        Account getAccountRecordTypeById(Id accountId);
+        List<Account> getAccountLaborRateById(Id accountId);
+        List<Account> getAccountDetailsByIDOrSearchCriteria(String accountId, String searchString, boolean allParams);
+        Account getAccountClassificationInfo(String inputId);
+        Account getAccountFSWRDGNumberAndAccountNumberById(Id accountID);
+        Map<Id, Account> getIdAccountMapByIds(Set<Id> accountIdSet);
+        List<Account> getAccountsByClassificationCodes(Set<Id> classificationCodeIds);
+        List<Account> getNearestARServiceCentersByProductLocation(Location productLocation, Integer rangeOfSearch, 
+            Integer quantityOfRecords, Set<Id> serviceCenterIds);
+        List<Account> getDealerGroupAccountsByAccountIds(List<Id> accountIDs);
+        List<Account> getListOfPersonAccountsByBrandingAndPostCode(String customerBranding, String postCode, 
+            String lastName, Id recordTypeId);
+        List<Account> getOrderedARServiceCentersByProductLocation(Location productLocation, Id serviceCenterRecortypeId,
+            Set<Id> serviceCenterIds);
+        List<Account> getOrderedServiceCenterByCoverageArea(Set<Id> serviceCenterIds, Location productLocation);
+        List<Account> getOrderedAndNearestServiceCenterByCoverageArea(Set<Id> serviceCenterIds,Location productLocation,
+            Integer rangeOfSearch);
+        List<Account> getListOfPersonAccountsByBrandingAndEmailAddress(String customerBranding, String customerEmail, 
+            String lastName, String customerFirstName, String customerCountry, Id recordTypeId);
+        List<Account> getListOfPersonAccountsByBrandingAndMobileNumber(String customerBranding, String mobNumber, 
+            String lastName, String customerFirstName, String customerCountry, Id recordTypeId);
+        List<Account> getDefaultAccountForOilType();
+        Account getAccountByAffinityId(String affinityId);
+        List<Account> getChildAccountsByUltimateParent(Set<Id> ultimateParentAccountIds);
+        List<Account> getValidateForActiveAccount(List<Id> accList);
+        List<Account> getChildAccountsByParentWhichHasUninvoicedBillingItem(Set<Id> parentAccountIds);
+        List<Account> getAccountsBySearchKeyword(String searchKeyword, String dealerGroupName);
+        List<Account> getWritingCompaniesWithObligor(Set<Id> writingCompanyIds);
+        List<Account> getPrimaryOrAdditionalAccounts(Set<Id> accountIds);
+        List<Account> getSharedAccountsByNameOrAccountNumber(Set<Id> accountIds, String name, String accountNumber);
+        List<Account> getChildAccountsByParentAccountName(String parentAccountName);
+        List<Account> getParentAccountsByBillingCountry(String billingCountry, Id recordTypeId);
+        List<Account> getAccountList(String searchValue);
+        List<Account> getPayeeAccountList(String searchValue);
+        List<Account> getAccountByHyperionNumber(String hyperionNumber);
+        List<Account> upsertAccountList(List<Account> listOfAccount);
+        Map<Id, Account> getAccountBillingTypeByAccountIds(Set<Id> accountIds);
+        List<Account> getAccountByNumber(String accountNumber);
+        Map<Id,Account> getAccountDetailsByParentId(List<String> parentAccountIds,String dealerGroupName,String recordTypeId);
+        List<Account> getAccountDetailsByAccountNumber(List<String> parentAccountIds,List<String> retailerCodes,
+            String dealerGroupName,String recordTypeId);
+        List<Account> getAccountsByAccIds(Set<String> accids);
+        Account getPersonAccountInfoById(Id accountId);
+        Map<Id, Account> getPersonAccountInfoByIds(Set<Id> accountIds);
+        Map<Id, Account> getEUNonDealerDuplicateAccount(Set<String> accountName, Set<String> billingPostalCode, 
+            Set<String> companyEmail, String recordTypeId, Set<Id> setOfAccountId);
+        List<Account> upsertAccounts(List<Account> accounts);
+        List<Account> getAccountsByAffinityIds(Set<String> affinityIds);
+        Map<String, Account> getAccountByAccountNumberAndRecordType(Set<String> accountNumber, Id recordTypeId);
+        Map<String, Account> getPersonAccountByAccountNumberAndRecordType(Set<String> accountNumber, Id recordTypeId);
+        List<Account> getAccountByRecordTypeAndEmail(String recordTypeName , String email);
+        List<Account> getListOfChildAccounts(Set<Id> setOfAccountRecordTypeId, Set<Id> setOfParentAccountIds);
+        List<Account> getLienholderAccountsByName(String accName);
+        List<Account> getListOfPersonAccountsByBrandingAndEmailAddress(String customerBranding, String customerEmail,
+            String lastName, String customerFirstName, String customerCountry, Id recordTypeId, String postCode, String billingStreet);
+        List<Account> getListOfPersonAccountsByBrandingAndMobileNumber(String customerBranding, String mobNumber,
+            String lastName, String customerFirstName, String customerCountry, Id recordTypeId, String postCode, String billingStreet);
+        List<Account> getListOfPersonAccountsByRecordTypeAndUltimateParentAccountAndCasePayeeNames(Set<Id> parentAccountIdSet, Id recordTypeId,
+            Set<String> casePayeeNameSet);
+        List<Account> getLastBillingStatementsByAccountIds(List<Id> clientIdList);
+        List<Account> getListOfPersonAccountsByRecordTypeAndUltimateParentAccount(Set<Id> parentAccountIdSet, Id recordTypeId);
+        Account getAccountIdByAccountNumber(String accountNumber);
+        List<Account> getEUFinanceAccountsByRecordTypeAndType(Id recordTypeId, String accountType, 
+            String accountName);
+        Account getAccountAddressById(String Id);
+        Map<Id, Account> getLatestBillingStatementsByAccountIds(List<Account> accountList);
+        Map<Id, Account> getLatestRemitBillingStatementsByAccountIdsAndBillingType(List<Account> accountList, String billingType);
+        List<Account> getAccountsByAdminCompanyCodes(Set<String> adminCompanyCodes);
+        List<Account> getGeolocationInformationByIds(Set<Id> accountIds);
+        List<Account> getAutoCheckAccountList(Set<Id> recordTypeIdSet, Set<Id> accountIdSet, String companyName, List<String> billingTypeSet);
+        List<Account> getPayeeAccountsBasedOnSearchCriteriaAndRecordTypeId(String accountName, Set<Id> recordTypeIdSet);
+        List<Account> getExistingPayeeAccountsForThirdPartyCheck(Case_Payee__c casePayee, Set<Id> recordTypeIdSet);
+        Map<Id, Account> getLatestBillingStatementsIncludingRemitByAccountIds(List<Account> accountList);
+        List<Account> getAccountsDetailByBillingAddress(String billingStreet, String billingCity, String state,
+            String country, String billingPostalCode);
+        List<Account> getAllAccountsByName(String accName);
+        Map<String, Account> getAccountsFromNameList(List<String> names, Id id);
+        List<Account> getRecentAccountByRecordTypeId(Id recordTypeId);
+        List<Account> getAccountsByClassificationCodeForFSWNAAuto(Set<String> recordTypeIdSet, String classificationCode, 
+            Integer recordCount, Set<String> billingTypeToExclude);
+        List<Account> getPersonAccounts(Id recordTypeId, String companyEmail, String legalName, String bankAccountNumber);
+        List<Account> getListOfAccountsByRecordTypeAndAccountName(String accountName, String recordTypeDeveloperName);
+        List<Account> getValidFSWNAAutoAccountBySetofId(Set<String> recordTypeIdSet, Set<String> accountIdSet);
+        List<Account> getChildAccountForUltimateParentByUltimateParetId(Set<String> recordTypeIdSet, String ultimateParentId);
+        List<Account> getAccountDetailsBySetOfNamesAndParentId(Set<String> accountNames, Id recordTypeId, 
+            Set<Id> parentAccountIds);
+        List<Account> getAccountsWithRelatedList(List<Id> accList, String relatedListName);
+        List<Account> getRepairFacilityAccountByAccountIds(Set<Id> accountIds, Double searchLocationLatitude, Double searchLocationLongitude);
+        Account getRepairTypesByAccountId(String accountId);
+        String getCustomerNumberForPersonAccount(Account account);
+        List<Account> getLastBillingStatementsByAccountIdSet(Set<Id> clientIdSet);
+        List<Account> getPersonAccounts(Set<Id> setOfRecordTypeId, Set<String> setOfCompanyEmail, Set<String> setOfLegalName, 
+            Set<String> setOfBankAccountNumber);
+        List<Database.SaveResult> insertAccounts(List<Account> listOfAccounts, Boolean isAllOrNone);
+        List<Database.SaveResult> updateAccounts(List<Account> listOfAccounts, Boolean isAllOrNone);
+        List<Account> getAccountsByTypeAndParentAffinityIdAndRecordType(Id recordTypeId, String affinityId, String typeOfAccount);
+        List<Account> getPayeeAccountsBasedOnSearchCriteriaAndAccountIds(String accountName, Set<Id> accountIdSet);
+        Account getPredictionScoreFields(Id accountId);
+        List<Account> getListOfPersonAccountByContractIdAndRecordTypeId(Set<String> contractId, Id recordTypeId);
+        List<Account> deleteExistingPersonAccountsByIds(Set<String> accountId);
+        Map<Id, Account> getPredictionScoreMap(Set<Id> accountIds);
+        List<Account> getAccountByRecordTypeDeveloperNameAndAccountNumber(String recordTypeDevName,String accNumber);
+        List<Account> getLienholderAccountsByNameAndBillingState(String accName, String billingState, Id accountRecordTypeId);
+        List<Account> getSpecialtyVendorsByBusinessTypes(Id recordTypeId, Set<String> businessTypeSet);
+        List<Account> getAccountsByRquestIdAndRecordType(Set<Id> setAccountRequestId, Set<Id> recordTypeSet);
+        Map<Id, Account> getAccountsNameNumberById(Set<Id> accountIds);
+        Map<Id,Account> getFSWNAAutoAccountMapByAccountIdSet(Set<Id> accountIdSet);
+        List<Account> getunBilledChildAccountsByUltimateParent(Set<Id> ultimateParentAccountIds);
+        List<Account> getAccountsIds(Set<Id> accountIds);
+        List<Account> getAccountRecordsByFieldName(List<String> fieldNames, String whereClause);
+        List<Account> getAccountByAssociatedAccount(Set<Id> setOfRecordTypeId, Set<Id> setOfAccountId);
+        List<Account> getListOfAssociatedContactAndAgents(Set<Id> setOfAccountId);
+        List<Account> getAccountBySpecialID(String specialId);
+        List<Account> getAccountsForMonthlyBilling(Id recordType, String schedule);
+        List<Account> getInvalidAccounts(Set<String> developerNames);
+        List<Account> getAccountsWithAutoPayAgreements(Set<String> developerNames, Set<String> autoPayAgreementDevelopersNames, Set<String> defaultPaymentMethods);
+        DataBase.QueryLocator getAccountsForRichcoreInvoice();
+        DataBase.QueryLocator getAccountsForRichcoreInvoice(Id accountId);
+        List<Account> getTotalActiveAccounts();
+        Map<Id, Account> getLatestBillingStatementsByBillingStatementIdAndAccountIds(Id billingStatementId, 
+            List<Id> accountList);
+    }
+
+    @TestVisible private static Set<Id> currentAccountIds;
+    public static Set<Id> requestedAccountIds;
+    @TestVisible private static Set<Id> uniqueRequestedAccountIds;
+    @TestVisible public static Map<Id, Account> accountCacheMap
+    {
+        get
+        {
+            uniqueRequestedAccountIds = new Set<Id>();
+            
+            if(accountCacheMap == null || currentAccountIds == null || (currentAccountIds != null 
+                                    && requestedAccountIds != null && !currentAccountIds.containsAll(requestedAccountIds))) {
+                if(currentAccountIds == null) {
+                    currentAccountIds = new Set<Id>();
+                }
+                if(requestedAccountIds == null) {
+                    requestedAccountIds = new Set<Id>();
+                }
+                if(accountCacheMap == null) {
+                    accountCacheMap = new Map<Id, Account>();
+                }
+
+                uniqueRequestedAccountIds = requestedAccountIds.clone();
+                uniqueRequestedAccountIds.removeAll(currentAccountIds);
+                currentAccountIds.addAll(uniqueRequestedAccountIds);
+                accountCacheMap.putAll(new Map<Id, Account>(getAccountsByIdsForCaching(uniqueRequestedAccountIds)));
+            }
+            return accountCacheMap;
+        }
+        private set;
+    }
+
+    @TestVisible
+    private static List<Account> getAccountsByIdsForCaching(Set<Id> accountIds)
+    {
+        return [
+            SELECT Id, NPDP_Account__c, Classification_Code__c, Company_Email__c, Default_Payment_Method__c, VAT_Number__c,
+                RecordType.DeveloperName, Parent.Name, Name, ParentId, Reduced_Deductible_Codes__c, Client_Rate_Group_ID__c,
+                Is_Inspection_Required__c, Fax, CurrencyIsoCode, Type, RecordTypeId, Claim_Type__c, Claim_Payment_Method__c,
+                Parent.Claim_Payment_Method__c, Parent.Default_Payment_Method__c, Compliance_Email__c, Owner.Email, 
+                Account_Number_Type__c, PersonEmail, Phone, PersonHomePhone, Dealer_Service_Team__c, NA_Auto_Business_Type__c, 
+                FF_Company__r.Name, Writing_Company__c, c2g__CODAAccountTradingCurrency__c, c2g__CODAAccountsPayableControl__c,
+                FF_Company__c, Is_Web_Dealer__c, IPT_Exempt_Dealer__c, Billing_Geolocation__c, DRAD_Lookup__c, Parent.Freeze_Client_Fees__c
+            FROM Account
+            WHERE Id IN :accountIds
+        ];
+    }
+
+    public static List<Account> getAccountWithPromotions(List<ID> accountIDs , Set<Id> promotionIdList){
+        return [SELECT ID, NumberOfCurrentPromotions__c, NumberOfPromotions__c, 
+                    (SELECT ID, IsActive__c FROM Promotions__r WHERE ID IN:promotionIdList)
+                FROM Account
+                WHERE ID IN:accountIDs];
+    }
+    
+    public static List<Account> getActivePromotionsForAccount(List<ID> accountIDs){
+        return [SELECT ID, NumberOfCurrentPromotions__c,  
+                    (SELECT ID, IsActive__c FROM Promotions__r WHERE IsActive__c=true)
+                FROM Account
+                WHERE ID IN:accountIDs];
+    }
+
+    public static List<Account> getRelatedPaymentStatementsByAccountIds(List<Account> listClients) {
+        return [
+            SELECT Id, (SELECT Name
+                        FROM Payment_Statements__r)
+            FROM Account
+            WHERE Id IN: listClients
+        ];
+    }
+
+    public static List<Account> getRelatedBillingStatementsByAccountIds(List<Account> listClients) {
+        return [
+            SELECT Id, (SELECT Name FROM Billing_Statements__r)
+            FROM Account
+            WHERE Id IN: listClients
+        ];
+    }
+
+    public static Account getAccountBillingCountryById(Id accountId){
+        return [SELECT Id, BillingCountry
+                FROM Account
+                WHERE Id = : accountId];
+    }
+
+    public static List<Account> getAccountList(Set<Id> setAccountRequestId){
+        return [Select Id,Account_Request_Id__c FROM Account Where Account_Request_Id__c IN : setAccountRequestId];
+    }
+
+    public static Integer accountSearchCount = 0;
+
+    public static List<Account> getAllVisibilePortalAccountsInfo()
+    {
+        return [Select Id, ParentID, Name, RecordType.Name, RecordTypeId, BillingCity, BillingState, AccountNumber, (Select Id, Name, Email from Contacts limit 100) from Account where isPartner = true  limit 100];
+    }
+
+    public static Map<Id,Account> getAccountsByIds(Set<Id> ids)
+    {
+        return new Map<Id,Account>([Select Id, Name, RecordTypeId, Tax_ID_N__c, Company_Email__c, OwnerId, Affinity_Id__c,
+            BillingCountry, BillingStreet ,BillingCity, BillingState, BillingPostalCode,
+            Account_Affinity_Id__pc, Lead_Source__pc, IsPartner, Client_Group_Id__c, Default_Communication_Method__c, Default_Payment_Method__c,
+            Billing_GeoLocation__Longitude__s, Billing_GeoLocation__Latitude__s, AccountNumber, CurrencyIsoCode, Accounting_Parent__c,
+            Accounting_Parent__r.AccountNumber, External_Account_Number__c,
+            (Select Id, Name, TPR_Region__c, TPR_Area__c, TPR_District__c, FirstName,
+            LastName FROM Contacts), (SELECT Id FROM Contracts__r Where Account_Name__c = :ids), 
+            (SELECT Id FROM Quotes__r Where Account__c = :ids)
+            FROM Account
+            WHERE Id in:ids ]);
+    }
+
+    public static List<Account> getAccountsByName(String name)
+    {
+        String tempSearch = name + '%';
+        return [SELECT Id, Name, AccountNumber FROM Account WHERE Name LIKE :tempSearch LIMIT 30];
+    }
+
+    public static Account getAccountClassificationInfo(String inputId) {
+        return [Select Id, Name, Classification_Code__c from Account where Id = : inputId limit 1];
+    }
+
+    public static List<Account> getAccounts(String searchString) {
+        String soql = 'select id, name, site, ownerId, type, company_email__c, phone, W9_Method__c, BillingCity, BillingCountry, BillingState, BillingStreet, BillingPostalCode  from account ';
+        if (searchString != '' && searchString != null) {
+            soql = soql +  ' where name LIKE \'%' + String.escapeSingleQuotes(searchString) + '%\'';
+        }
+        soql = soql + ' LIMIT 500' ;
+        return database.query(soql);
+
+    }
+
+    public List<Account> getAccountsSearchLookup(String searchNameString, String searchCity, String searchState,
+        String searchPostalCode, String searchPhone, String searchClientStatus, String searchCountry, String searchNumber) {
+        return getAccountsSearchLookup(searchNameString.trim(), searchCity.trim(), searchState.trim(), searchPostalCode.trim(),
+            searchPhone.trim(), searchClientStatus, searchCountry.trim(), searchNumber.trim(), null);
+    }
+
+    public List<Account> getAccountsSearchLookup(String searchNameString, String searchCity, String searchState,
+        String searchPostalCode, String searchPhone, String searchClientStatus, String searchCountry, String searchNumber,
+        String personAccountClause) {
+        String soql = 'select id, name, site, ownerId, type, company_email__c, Phone_Formula__c, Phone, W9_Method__c, ' +
+                      'BillingCity, BillingCountry, BillingState, BillingStreet, BillingPostalCode, recordtype.developername, ' +
+                      'AccountNumber, Owner.FirstName, Owner.LastName, Client_Status_Formula__c, W9_On_File__c, Account_Email__c, Classification_Code__c, IsFSW__c from account where ';
+        String soqlCount = 'SELECT Count() From Account WHERE';
+
+        String whereClause = prepareAccountsSearchLookupWhereClause(searchNameString, searchCity, searchState,
+            searchPostalCode, searchPhone, searchClientStatus, searchCountry, searchNumber,
+            personAccountClause);
+
+        soql = soql + whereClause + ' AND Dealer_Status__c != \'Dormant\'' + ' ' + ' ORDER BY Name ASC LIMIT 1000' ;
+        soqlCount = soqlCount + whereClause + ' LIMIT 1001';
+        accountSearchCount = database.countQuery(soqlCount);
+
+        return database.query(soql);
+    }
+    
+    public List<Account> getAccountsSearchLookupForEU(Set<Id> recordTypeids,String searchNameString, String searchCity, String searchState,
+        String searchPostalCode, String searchPhone, String searchClientStatus, String searchCountry, String searchNumber, String personAccountClause) {
+        
+        String soql = 'Select id, name, site, ownerId, type, company_email__c, Phone_Formula__c, Phone, W9_Method__c, ' +
+            'BillingCity, BillingCountry, BillingState, BillingStreet, BillingPostalCode, recordtype.developername, ' +
+            'AccountNumber, Owner.FirstName, Owner.LastName, Client_Status_Formula__c, W9_On_File__c, Account_Email__c, Classification_Code__c, IsFSW__c'+
+            ' From Account '+
+            'Where RecordTypeId IN : recordTypeids AND ';
+
+        String whereClause = prepareAccountsSearchLookupWhereClause(searchNameString, searchCity, searchState,searchPostalCode, searchPhone,
+            searchClientStatus, searchCountry, searchNumber, personAccountClause);
+
+        soql = soql + whereClause + ' AND (Dealer_Status__c = \'Active\' OR Client_Status_New__c = \'Active\') ORDER BY Name ASC LIMIT 1001' ;
+        return database.query(soql);
+    }
+    
+    public List<Account> getAccountsSearchLookupForPGM(String searchNameString, String searchCity, String searchState,
+        String searchPostalCode, String searchPhone, String searchClientStatus, String searchCountry, String searchNumber,
+        String personAccountClause) {
+        String soql = 'select id, name, site, ownerId, type, company_email__c, Phone_Formula__c, Phone, W9_Method__c, ' +
+                      'BillingCity, BillingCountry, BillingState, BillingStreet, BillingPostalCode, recordtype.developername, ' +
+                      'AccountNumber, Owner.FirstName, Owner.LastName, Client_Status_Formula__c, W9_On_File__c, Account_Email__c, Classification_Code__c, IsFSW__c ' + 
+                      'from account where ';
+        String soqlCount = 'SELECT Count() From Account WHERE';
+
+        String whereClause = prepareAccountsSearchLookupWhereClause(searchNameString, searchCity, searchState,
+            searchPostalCode, searchPhone, searchClientStatus, searchCountry, searchNumber,
+            personAccountClause);
+
+        soql = soql + whereClause + ' AND Account_Number_Type__c = \''+ AccountConstants.PGM_ACCOUNT_TYPE + '\' ORDER BY Name ASC LIMIT 1000' ;
+        soqlCount = soqlCount + whereClause + ' LIMIT 1001';
+        accountSearchCount = database.countQuery(soqlCount);
+
+        return database.query(soql);
+    }
+    
+    private string prepareAccountsSearchLookupWhereClause(String searchNameString, String searchCity, String searchState,
+        String searchPostalCode, String searchPhone, String searchClientStatus, String searchCountry, String searchNumber,
+        String personAccountClause) {
+        String whereClause = '';
+        if (searchNameString != '' && searchNameString != null) {
+            whereClause = whereClause +  ' name LIKE \'%' + String.escapeSingleQuotes(searchNameString) + '%\' ';
+        }
+        if (searchCity != '' && searchCity != '') {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + ' BillingCity LIKE \'%' + String.escapeSingleQuotes(searchCity) + '%\' ';
+        }
+        if (searchState != '' && searchState != '') {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + ' BillingState LIKE \'%' + String.escapeSingleQuotes(searchState) + '%\' ';
+        }
+        if (searchPhone != '' && searchPhone != '') {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + ' (Phone_Formula__c LIKE \'' + String.escapeSingleQuotes(searchPhone) + '%\' OR Phone_Formula__c LIKE \'(' + String.escapeSingleQuotes(searchPhone) + ')%\') ';
+        }
+        if (searchPostalCode != '' && searchPostalCode != '') {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + ' BillingPostalCode LIKE \'%' + String.escapeSingleQuotes(searchPostalCode) + '%\' ';
+        }
+        if (searchClientStatus != '' && searchClientStatus != '') {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + ' Client_Status_Formula__c LIKE \'%' + String.escapeSingleQuotes(searchClientStatus) + '%\' ';
+        }
+        if (searchCountry != '' && searchCountry != '') {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + ' BillingCountry LIKE \'%' + String.escapeSingleQuotes(searchCountry) + '%\' ';
+        }
+        if (searchNumber != '' && searchNumber != null) {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + ' AccountNumber LIKE \'%' + String.escapeSingleQuotes(searchNumber) + '%\' ';
+        }
+        if(String.isNotBlank(personAccountClause)) {
+            if (whereClause != '') {
+                whereClause = whereClause + ' AND ';
+            }
+            whereClause = whereClause + personAccountClause;
+        }
+        
+        String clientFeeExcludeWhereClause = 'RecordType.DeveloperName != \'' 
+            + AccountConstants.RECORD_TYPE_NAME_CLIENT_FEE_PAYEE + '\'';
+        if (whereClause != '') {
+            whereClause = whereClause + ' AND ';
+        }
+        whereClause = whereClause + clientFeeExcludeWhereClause;
+
+        return whereClause;
+    }
+
+    public static Account getAccountWithTaxFields(String Id) {
+        return [SELECT Id, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, RDG_Nbr__c, MR_CLIENT_NUMBER_INT__c,
+                    Premium_Location_Code__c, RecordTypeId, RecordType.Name, AccountNumber
+                FROM Account
+                WHERE Id = : Id];
+    }
+
+    public static List<Account> cpmGetQA(Set<String> inpAcId)
+    {
+        return [SELECT Id, Name FROM Account WHERE AccountNumber LIKE 'I%' AND name IN: inpAcId];
+    }
+
+    public static List<Account> adjMgrGetEmail(Set<String> inspectioncompany)
+    {
+        return [SELECT Id, Company_Email__c, Name FROM Account WHERE Name IN: inspectioncompany];
+    }
+
+    public static Account getAccountById(String Id)
+    {
+        List<Account> accounts = [SELECT a.Company_Email__c, a.Is_Primary_Account__c, a.Tax_ID_N__c, a.W9_Method__c, a.Website,
+                            a.WLS_External_ID__c, a.Type_of_close__c, a.Type, a.Towing_Rate__c, a.TWG_Connect_Account_Type__c,
+                            a.SystemModstamp, a.Sublet_Rate__c, a.State__c, a.Special_ID__c, a.Source_System__c,
+                            a.SourceSystemName__c, a.Site, a.SicDesc, a.ShippingStreet, a.ShippingState, a.ShippingPostalCode,
+                            a.ShippingLongitude, a.ShippingLatitude, a.ShippingCountry, a.ShippingCity, a.Service_Level__c,
+                            a.STY_Region__c, a.STY_Division__c, a.STY_District__c, a.STY_Area__c, a.Retail_Rate_Flag__c,
+                            a.Responsible_for_close__c, a.Rental_Rate__c, a.RecordTypeId, a.Rate_Manager_External_Id__c,
+                            a.RDG_Nbr__c, a.RDG_Dealer_Mechanic__c, a.Premium_Location_Code__c, a.Phone, a.ParentId, a.Parent.name,
+                            a.OwnerId, a.NumberOfEmployees, a.Nat_l_Cred_Union__c, a.Name, a.Metro_Area__c, a.MasterRecordId,
+                            a.Management_Copy__c, a.Management_Company_Name__c, a.MR_CLIENT_NUMBER_INT__c, a.Status__c,
+                            a.License_Start_Stop_Date__c, a.License_Number__c, a.LastViewedDate, a.LastReferencedDate,
+                            a.LastModifiedDate, a.LastModifiedById, a.LastActivityDate, a.Labor_Rate__c, a.JigsawCompanyId,
+                            a.Jigsaw, a.Is_this_Reinstallment_Reactivation__c, a.Is_Client_signed_up_for_TWG_Connect__c,
+                            a.IsPartner, a.IsDeleted, a.IsCustomerPortal, a.Install_Implementation_Date__c, a.Industry,
+                            a.Id, a.Fax, a.F_I_Accounting_Software_Company_Name__c, a.FEX_Dealer_Mechanic__c, a.E_Menu_Type__c,
+                            a.Description, a.Delete_Flag__c, a.Dealership_Name__c, a.Dealer_Type__c, a.Dealer_Group_Name__c,
+                            a.Dealer_Agency_Number__c, a.DataSyncTransaction_ID__c, a.DRAD__c, a.DM_AM_assigned__c,
+                            a.DMS_Integration_Rec_Count__c, a.CreatedDate, a.CreatedById, a.Correspondence__c, a.Corp_Type__c,
+                            a.Close_Sign_up_Date__c, a.Client_Type__c, a.Client_Type_Desc__c, a.Client_Status__c,
+                            a.Client_Status_Formula__c, a.Client_Description__c, a.Classification_Code__c, a.CSO_Credit__c,
+                            a.BusinessUnit_INT_WSDL__c, a.BillingStreet, a.BillingState, a.BillingPostalCode, a.BillingLongitude,
+                            a.WLS_Company_Code__c, a.BillingLatitude, a.BillingCountry, a.BillingCity, a.BCC_Active__c,
+                            a.BCC3_Email_Address__c, a.BCC2_Email_Address__c, a.BCC1_Email_Address__c, a.Attention_Line__c,
+                            a.AnnualRevenue, a.Alternate_ID__c, a.Additional_Mechanic__c, a.AccountSource, a.AccountNumber,
+                            a.Billing_Street__c, a.Billing_City__c, a.Billing_State__c, a.Billing_Zip__c, a.Billing_Country__c, a.Brand__c,
+                            a.Billing_Street_2__c, a.Billing_Geolocation__Latitude__s, a.Billing_Geolocation__Longitude__s, a.Billing_GeoLocation__c,
+                            a.Payee_Number__c, a.Super_Agent_Name__c, a.Owner.Name, a.RecordType.Name,
+                            a.Dealer_Status__c, a.Country__c, a.Master_Agent__c, Receive_Remittance_Method__c,
+                            a.Super_Agent__c, a.Reason_for_NLT__c, a.Billing_Type__c, a.TOBA_Received__c, a.Last_Contract_Sold_Date__c,
+                            a.Billing_Schedule_Type__c, a.Due_Diligence__c, a.VAT_number__c, a.Dealer_Qualifier__c, a.Default_Payment_Method__c,
+                            a.createdBy.Name, a.lastModifiedBy.Name, a.ISFSW__c, a.Agent__c, a.Customer_Number__c, Business_Hours__c, Account_Email__c,
+                            a.DT_Notes__c, Dealer_Type_Changed_By__c, Date_Dealer_Type_Changed__c, Change_Request_of_Dealer_Type_By__c,
+                            a.Agent__r.RAC_Electronic__c, a.Master_Agent__r.RAC_Electronic__c, a.Super_Agent__r.RAC_Electronic__c, 
+                            a.Branding__r.Manufacturer__c, a.Associated_Accounts__c,
+                            (SELECT Id, Name, Password_Required__c, Commission_password__c, Dealer_ProductLookup__c, Contract_Type__c,
+                                Dealer_ID__c,Default__c, Default_Amt__c, Maximum_Amt__c,Maximum__c, Minimum__c,Minimum_Amt__c,
+                                RecordType.Name from Commissions__r where Active__c = true),
+                            (SELECT Id, Term__r.Name, Coverage__r.Name, Coverage__r.Spec_Coverage_INT__r.Name, Contract_Type__c,
+                                Contract_Type__r.ProductTypeDetailType_INT__c, Coverage__r.Deductible__c,
+                                Coverage__r.Deductible_Type__c, Coverage__c,Coverage__r.RateRoot_ID_INT__c,
+                                Term__c, Account__c, Contract_Type_Description__c, Record_Key__c
+                                From Dealer_Default_Product_Setups1__r) ,
+                            (Select Id, Name, Active__c, Coverage_name__c, Financed__c,ProductClass_INT__c,
+                                ProductClassDesc_INT__c, ProductTypeDesc_INT__c, ProductTypeName_INT__c,ProductTypeDetailType_INT__c
+                                From Dealer_Products__r),
+                            (SELECT Id, Account__c, Password__c, Type__c, User_ID__c, CallType__c From DMS_Integration_Settings__r LIMIT 1)
+                                 FROM Account a
+                                 WHERE Id =: id LIMIT 1];
+        if(accounts.size() == 0){
+            throw new TWG_Exception(TWG_Exception.ERROR_ACCOUNT_SEARCH_BY_ID_0);
+        }
+        return accounts.get(0);
+    }
+
+    public static Map<Id, Account> getAccountsDataMapByIds(Set<Id> ids)
+    {
+        return new Map<Id, Account>([SELECT Id, a.Company_Email__c, a.Is_Primary_Account__c, a.Tax_ID_N__c, a.W9_Method__c, a.Website,
+                            a.WLS_External_ID__c, a.Type_of_close__c, a.Type, a.Towing_Rate__c, a.TWG_Connect_Account_Type__c,
+                            a.SystemModstamp, a.Sublet_Rate__c, a.State__c, a.Special_ID__c, a.Source_System__c,
+                            a.SourceSystemName__c, a.Site, a.SicDesc, a.ShippingStreet, a.ShippingState, a.ShippingPostalCode,
+                            a.ShippingLongitude, a.ShippingLatitude, a.ShippingCountry, a.ShippingCity, a.Service_Level__c,
+                            a.STY_Region__c, a.STY_Division__c, a.STY_District__c, a.STY_Area__c, a.Retail_Rate_Flag__c,
+                            a.Responsible_for_close__c, a.Rental_Rate__c, a.RecordTypeId, a.Rate_Manager_External_Id__c,
+                            a.RDG_Nbr__c, a.RDG_Dealer_Mechanic__c, a.Premium_Location_Code__c, a.Phone, a.ParentId, a.OwnerId,
+                            a.NumberOfEmployees, a.Nat_l_Cred_Union__c, a.Name, a.Metro_Area__c, a.MasterRecordId,
+                            a.Management_Copy__c, a.Management_Company_Name__c, a.MR_CLIENT_NUMBER_INT__c,
+                            a.License_Start_Stop_Date__c, a.License_Number__c, a.LastViewedDate, a.LastReferencedDate,
+                            a.LastModifiedDate, a.LastModifiedById, a.LastActivityDate, a.Labor_Rate__c, a.JigsawCompanyId,
+                            a.Jigsaw, a.Is_this_Reinstallment_Reactivation__c, a.Is_Client_signed_up_for_TWG_Connect__c,
+                            a.IsPartner, a.IsDeleted, a.IsCustomerPortal, a.Install_Implementation_Date__c, a.Industry,
+                            a.Fax, a.F_I_Accounting_Software_Company_Name__c, a.FEX_Dealer_Mechanic__c, a.E_Menu_Type__c,
+                            a.Description, a.Delete_Flag__c, a.Dealership_Name__c, a.Dealer_Type__c, a.Dealer_Group_Name__c,
+                            a.Dealer_Agency_Number__c, a.DataSyncTransaction_ID__c, a.DRAD__c, a.DM_AM_assigned__c,
+                            a.DMS_Integration_Rec_Count__c, a.CreatedDate, a.CreatedById, a.Correspondence__c, a.Corp_Type__c,
+                            a.Close_Sign_up_Date__c, a.Client_Type__c, a.Client_Type_Desc__c, a.Client_Status__c,
+                            a.Client_Status_Formula__c, a.Client_Description__c, a.Classification_Code__c, a.CSO_Credit__c,
+                            a.BusinessUnit_INT_WSDL__c, a.BillingStreet, a.BillingState, a.BillingPostalCode, a.BillingLongitude,
+                            a.WLS_Company_Code__c, a.BillingLatitude, a.BillingCountry, a.BillingCity, a.BCC_Active__c,
+                            a.BCC3_Email_Address__c, a.BCC2_Email_Address__c, a.BCC1_Email_Address__c, a.Attention_Line__c,
+                            a.AnnualRevenue, a.Alternate_ID__c, a.Additional_Mechanic__c, a.AccountSource, a.AccountNumber,
+                            a.Billing_Street__c, a.Billing_City__c, a.Billing_State__c, a.Billing_Zip__c, a.Billing_Country__c,
+                            a.Billing_Street_2__c, a.Billing_GeoLocation__c,
+                            (SELECT Id, Name, Password_Required__c, Commission_password__c, Dealer_ProductLookup__c, Contract_Type__c,
+                                Dealer_ID__c,Default__c, Default_Amt__c, Maximum_Amt__c,Maximum__c, Minimum__c,Minimum_Amt__c,
+                                RecordType.Name from Commissions__r where Active__c = true),
+                            (SELECT Id, Term__r.Name, Coverage__r.Name, Coverage__r.Spec_Coverage_INT__r.Name, Contract_Type__c,
+                                Contract_Type__r.ProductTypeDetailType_INT__c, Coverage__r.Deductible__c,
+                                Coverage__r.Deductible_Type__c, Coverage__c,Coverage__r.RateRoot_ID_INT__c,
+                                Term__c, Account__c, Contract_Type_Description__c, Record_Key__c
+                                From Dealer_Default_Product_Setups1__r) ,
+                            (Select Id, Name, Active__c, Coverage_name__c, Financed__c,ProductClass_INT__c,
+                                ProductClassDesc_INT__c, ProductTypeDesc_INT__c, ProductTypeName_INT__c,ProductTypeDetailType_INT__c
+                                From Dealer_Products__r),
+                            (SELECT Id, Account__c, Password__c, Type__c, User_ID__c, CallType__c From DMS_Integration_Settings__r LIMIT 1)
+                                 FROM Account a
+                                 WHERE Id in :ids]);
+    }
+
+    public static List<Account> getAccountsByNameOrAccountNumberWithRecordType(String name, String accountNumber, String recordType) {
+        List<Account> accounts = new List<Account>();
+        if (name.trim() == '') { name = null;} else {name = name + '%';}
+        if (accountNumber.trim() == '') {accountNumber = null;} else {accountNumber = accountNumber + '%';}
+        if (accountNumber != null && name != null) {
+            accounts = [Select a.Id, a.TWG_Connect_Account_Type__c, a.Name, a.AccountNumber from Account a where (a.Name like :name or a.AccountNumber like :accountNumber) and a.RecordType.DeveloperName = :recordType limit 11];
+        } else if (accountNumber != null && name == null) {
+            accounts = [Select a.Id, a.TWG_Connect_Account_Type__c, a.Name, a.AccountNumber, Client_Status__c from Account a where a.AccountNumber like :accountNumber and a.RecordType.Name = :recordType  limit 11];
+        } else if (name != null) {
+            accounts = [Select a.Id, a.TWG_Connect_Account_Type__c, a.Name, a.AccountNumber from Account a where a.Name like :name and a.RecordType.DeveloperName = :recordType  limit 11];
+        }
+        return accounts;
+    }
+
+    public static Boolean hasAccessToMoreThanOneAccountByRecordType(String recordType) {
+        List<Account> accounts = new List<Account>();
+
+        accounts = [SELECT a.Id FROM Account a WHERE a.RecordType.DeveloperName = :recordType limit 2];
+
+        if (accounts.size() > 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static Map<Id, Account> getAccountMapByIds(Set<Id> accountIds) {
+        return new Map<Id, Account>([
+            SELECT Id, Billing_Schedule_Type__c, Parent.Billing_Schedule_Type__c, Name, ISFSW__c, Is_Service_Center_Active__c, 
+                Parent.Billing_Type__c, Billing_Type__C, Default_Payment_Method__c, Writing_Company__c, AccountNumber, 
+                RDG_Nbr__c, Is_Billing_Statement_Batch_Running__c, FF_Company__c, FF_Company__r.Name, Client_Status__c,
+                CurrencyIsoCode, BillingCountry, RecordTypeId, BillingCity, BillingLatitude, BillingLongitude, BillingPostalCode, 
+                BillingState, BillingStreet, Account_Email__c, Billing_GeoLocation__Latitude__s, ShippingState,
+                Billing_GeoLocation__Longitude__s, Business_Hours__c, RecordType.DeveloperName,Tax_ID_N__c, Payee_Number__c,
+                Company_Email__c, OwnerId, Affinity_Id__c, Account_Affinity_Id__pc, Lead_Source__pc, PersonEmail,
+                IsPartner, Client_Group_Id__c, Default_Communication_Method__c, Type, ParentId, Accounting_Parent__c, 
+                Dealer_Service_Team__c, Ultimate_Parent__c, Ultimate_Parent__r.Is_Billing_Statement_Batch_Running__c, 
+                c2g__CODAAccountTradingCurrency__c, c2g__CODAAccountsPayableControl__c, Dealer_Group_Name__c, Goodwill_Claims__c, 
+                NA_Auto_Business_Type__c, Website, Way_To_Contact_1__c, Service_Number__c, Parent.Affinity_Id__c, Parent.AccountNumber,
+                Ultimate_Parent__r.Group_Client_Fee__c,Ultimate_Parent__r.Name,Ultimate_Parent__r.AccountNumber, 
+                IsPersonAccount, FirstName, LastName, State_Country_Change__c, External_Dealer_Type__c, Billing_GeoLocation__c,
+                Phone, Credit_Union_Financial_Institution__c, Client__r.Affinity_Id__c, Client__r.Hyperion_Number__c, Fax,
+                Billing_Country__c, Site, Individual_Case_Payee_Name__c, Client__r.Additional_Mechanic__c, Billing_Street__c,
+                Billing_Street_2__c, Billing_City__c, Billing_Zip__c, Billing_State__c, Invoice_Due_Days__c, Classification_Code__c,
+                Account_Number_Type__c, Dealer_Group_Code__c
+            FROM Account
+            WHERE Id IN :accountIds
+            ORDER BY Name
+        ]);
+    }
+
+    public static List<Account> getChildAccountsByParent(Set<Id> parentAccountIds) {
+        return [SELECT Id, Name, ParentId, Billing_Schedule_Type__c, Parent.Billing_Schedule_Type__c, AccountNumber,
+                    Parent.Billing_Type__c,Billing_Type__c,BillingStreet,BillingCity,BillingState,
+                    BillingPostalCode,BillingCountry,Phone,ISFSW__c,Type,Virtual_Inspection__c,Parent.Virtual_Inspection__c,
+                    PGA_Opt_In__c, Parent.PGA_Opt_In__c, RecordTypeId
+                FROM Account
+                WHERE ParentId IN : parentAccountIds];
+    }
+
+    public static List<Account> getAccountsByTaxIdLast4DigitsAndZip(String last4, String zip)
+    {
+        String tempZip = zip + '%';
+        return [SELECT Id, Name, Phone, BillingCountry, BillingState, BillingStreet, Labor_Rate__c, Company_Email__c, W9_Method__c, Tax_ID_N__c, BillingCity FROM Account WHERE Tax_Id_Last_4_Digits__c = :last4 AND BillingPostalCode LIKE :tempZip];
+    }
+
+    public static Map<String, Account> getAccountsFromNameList(List<String> names, Id id) {
+        List<Account> accts = [Select Id, Name FROM Account WHERE Name IN :names AND RecordTypeId = :id];
+        Map<String, Account> acctMap = new Map<String, Account>();
+        for (Account acct : accts) {
+            acctMap.put(acct.Name, acct);
+        }
+        return acctMap;
+    }
+
+    public static List<Account> getWarehouseAccounts(String recordTypeDeveloperName, String country, String status) {
+        return [select id,Name,ShippingStreet,ShippingCity,ShippingState,Shippingpostalcode,ShippingCountry,Territories_Serviced__c from Account where RecordType.DeveloperName = :recordTypeDeveloperName AND Territories_Serviced__c includes (:country) AND Status__c = :status];
+    }
+
+    public static Account getAccountByAffinityId(String affinityID) {
+        List<Account> accts = [Select Id, Branding__c FROM Account WHERE Affinity_Id__c = : affinityID];
+        if (accts.size() > 0) {
+            return accts.get(0);
+        }
+        return null;
+    }
+
+    public static List<Account> getAffinityPartnerAccount(ID recordType, String affinityPartnerCode){
+        return [SELECT id, Affinity_Type__c, currencyISOCode FROM Account WHERE RecordTypeId = : recordType AND Affinity_Id__c = : affinityPartnerCode LIMIT 1];
+    }
+
+    public static List<Account> getParentDealerSearchRecords(Id accountId, String searchKey) {
+        return new List<Account>([Select Id from Account where Id =:accountId and (Name LIKE:searchKey OR AccountNumber LIKE:searchKey)]);
+    }
+    
+    public static List<Account> getAccountByRecordTypeDeveloperNameAndAccountNumber(String recordTypeDevName,String accNumber){
+        return [Select Id From Account where RecordType.Developername =: recordTypeDevName AND AccountNumber =: accNumber];
+    }
+
+    public static Account getBillingInformation(ID accountID) {
+        return [SELECT Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry FROM Account WHERE Id =: accountID];
+    }
+
+    public static Account getAccountsFromQuotesbyID(List<Quote__c> quotelist) {
+        return [select id, Client_Group_ID__c, ShippingCity,BCC_Active__c, ShippingCountry, ShippingPostalCode, ShippingState, ShippingStreet,RDG_Nbr__c,MR_CLIENT_NUMBER_INT__c,name,Dealer_Type__c,BillingCity, BillingCountry, BillingPostalCode, BillingState, BillingStreet,phone,Premium_Location_Code__c,Classification_Code__c ,BusinessUnit_INT_WSDL__c from account where id=:quotelist.get(0).Account__c];
+    }
+
+    public static List<Account> getValidateForActiveAccount(List<Id> accList) {
+        return new List<Account>([Select Id,name from Account where Id IN: accList]);
+    }
+
+    public static Account getAccountCountry(ID accountId) {
+        return [Select BillingCountry, Is_Payment_Statement_Batch_Running__c, Type, Affinity_Id__c, 
+                Parent.Affinity_Id__c, ParentId 
+                from Account where id=:accountId];
+    }
+
+    public List<Account> retrieveFreeStandingWarrantyAccountsBySchedulingTypeAndCompany(Set<String> schedulingTypeSet,
+        String companyName) {
+        return [
+            SELECT Id, Name, ParentId, Billing_Type__c
+            FROM Account
+            WHERE ISFSW__c = True
+                AND Billing_Schedule_Type__c IN: schedulingTypeSet
+                AND FF_Company__r.Name =: companyName
+        ];
+    }
+
+    public static List<Account> getSamsungAccount() {
+        return [SELECT Name
+                FROM Account
+                WHERE Name =: AccountConstants.ACCOUNT_NAME_SAMSUNG
+                AND RecordType.DeveloperName =: AccountConstants.RECORD_TYPE_SAMSUNG];
+    }
+
+    public static Account getPersonAccountDetailById(Id accountId) {
+        List<Account> lstAccount = [SELECT Id, FirstName, LastName, Name, PersonEmail, PersonContactId,Salutation,
+                                    PersonMailingStreet, PersonMailingState, PersonMailingCity, PersonMailingCountry,
+                                    PersonMailingPostalCode, PersonMobilePhone, LastModifiedDate, Customer_Number__c
+                                    FROM Account
+                                    WHERE Id =: accountId AND IsPersonAccount = true];
+        if(lstAccount.size() > 0) {
+            return lstAccount[0];
+        }
+        return null;
+    }
+
+    public static Account getPersonAccountInfoById(Id accountId) {
+        List<Account> lstAccount = [SELECT Id, FirstName, LastName, PersonEmail, PersonContactId,Salutation,
+                                    PersonMailingStreet, PersonMailingState, PersonMailingCity, PersonMailingCountry,
+                                    PersonMailingPostalCode, PersonMobilePhone, Opt_out_of_all_Marketing__c
+                                    FROM Account
+                                    WHERE Id =: accountId AND IsPersonAccount = true];
+        if(lstAccount.size() > 0) {
+            return lstAccount[0];
+        }
+        return null;
+    }
+
+    public static Account getPersonAccountByEmail(String email) {
+        List<Account> lstAccount = [SELECT Id, PersonEmail
+                                    FROM Account
+                                    WHERE PersonEmail =: email AND IsPersonAccount = true];
+        if(lstAccount.size() > 0) {
+            return lstAccount[0];
+        }
+        return null;
+    }
+
+    public static Account getAccountByUserId(Id userId) {
+        List<User> users = [SELECT Contact.Account.Id from user where id = :userId LIMIT 1];
+        if(users.size() > 0) {
+            String accountId = (String)users[0].Contact.Account.Id;
+            if(accountId != null)
+                return getAccountById(accountId);
+            else
+                return null;
+        }
+        else
+            return null;
+    }
+
+    public static Account getAccountInfoById(Id accountID){
+        return [
+            SELECT Name, AccountNumber, currencyISOCode, Id, FirstName, LastName, Default_Payment_Method__c,Writing_Company__c,
+                BillingStreet, BillingState, BillingCity, BillingCountry, Billing_Type__c, Dealer_Loan__c,Bank_Account_Number__c,
+                BillingPostalCode, PersonMobilePhone, LastModifiedDate, ISFSW__c, Opt_out_of_all_Marketing__c, Dealer_Status__c,
+                c2g__CODAAccountTradingCurrency__c, c2g__CODAAccountsPayableControl__c, Account_Email__c, Billing_Country__c,
+                Parent.Id, RecordType.DeveloperName, Dealer_Qualifier__c, Branding__c, Branding__r.Client_Intro_Text__c, IsPersonAccount,
+                Close_Sign_up_Date__c, Adjustments__c, Branding__r.Display_VIN__c, Branding__r.Vehicle_Type_Covered__c,
+                Country__c, Branding__r.Vehicle_Source_System__c, Branding__r.Name, Branding__r.Default_Customer_Details__c,
+                Branding__r.Vehicle_Data_Display__c, Affinity_Id__c, Branding__r.Brand_Color__c, Branding__r.Disclaimer__c,
+                Branding__r.Marketing_Consent__c, Branding__r.Coverage_New__c, Branding__r.Coverage_Used__c, Initial_Disclosure__c,
+                Branding__r.Coverage_Top_Up__c, Branding__r.VIN_Validation__c, FF_Company__c, FF_Company__r.Name, 
+                Branding__r.Person_Account_Brand__c, Accounting_Parent__c, Accounting_Parent__r.AccountNumber, Parent.Affinity_Id__c,
+                Branding__r.Header_Font_Style__c, Branding__r.Is_Full_Address_Show__c, Branding__r.Is_Person_Company_Show__c,
+                Branding__r.Body_Font_Style__c, Branding__r.Component_2__c, Branding__r.Is_Display_No_Vehicle_Detail_Required__c,
+                Branding__r.Component_3__c, Branding__r.Secondary_Color_1__c, Branding__r.Is_Display_Manual_Vehicle_Search__c,
+                Branding__r.Secondary_Color_2__c,Branding__r.Is_Display_VIN__c,Branding__r.Is_Display_Registration_Number__c,
+                Branding__r.Is_Display_Policy_Sold_Date__c,Branding__r.Is_Display_Vehicle_Purchase_Price__c, Branding__r.Default_Customer_Details__r.Name,
+                Branding__r.Is_Display_Mileage_Kilometer__c,Branding__r.Is_Display_Get_Vehicle_Data_Button__c,
+                Branding__r.Is_Display_Vehicle_By_VIN_Reg_Both__c, Branding__r.Is_How_Vehicle_Sold_Display__c,
+                Branding__r.Alert_Color__c, Branding__r.Tab_Font_Style__c, Branding__r.Accent_Color__c, Branding__r.Community_Privacy_Policy__c,
+                Branding__r.Button_Text_Color__c, Branding__r.Manufacturer__c, Branding__r.Privacy_Policy__c,
+                Branding__r.Product_filters_for_Vehicle_Info__c, Branding__r.Display_fields_on_Vehicle_Info_banner__c,
+                Branding__r.Display_Manufacturer_Cover_Message__c, RecordTypeId, Branding__r.Client_Contact__c,
+                Branding__r.Country_Code__c, Writing_Company__r.Name, Classification_Code__c, Branding__r.Second_Vehicle_Source_System__c,
+                Client__r.Name,Client__r.AccountNumber, Default_Language_Method__c, Branding__r.Duplicate_VIN_Warning__c, PersonEmail,
+                Default_Communication_Method__c, Fax, Company_Email__c, Is_Web_Dealer__c, IPT_Exempt_Dealer__c, Phone, test_Account__c,
+                Branding__r.Digital_Consent_Text__c, Branding__r.Search_Criteria__c, Branding__r.Disable_Get_Address_Button__c,RecordType.Name,
+                Area__c, Region__c, Payee_Number__c,                
+                (SELECT Id FROM Accounts3__r WHERE Claim_Type__c = :AccountConstants.CLAIM_AT_DEALER_GROUP),
+                (SELECT Id, Name FROM Attachments WHERE Name LIKE: AccountConstants.DIGITAL_CONSENT_ATTACHMENT_NAME ORDER BY 
+                LastModifiedDate DESC LIMIT 1),
+                (SELECT Id, CurrencyIsoCode, TWG_Product__r.CurrencyISOCode FROM Dealer_Products__r WHERE Product_Status__c = :Label.Active)
+            FROM Account
+            WHERE Id = :accountID
+        ];
+    }
+
+    public static List<Account> getAccountDetailsByIDOrSearchCriteria(String accountId, String searchString, boolean allParams)
+    {
+        if(!allParams){
+            return [select Id, Name, Site, AccountNumber, BillingStreet, BillingCity, BillingPostalCode, BillingState, BillingCountry,owner.alias, c2g__CODAIntercompanyAccount__c,IsPersonAccount,Phone from Account where id = :accountId];
+        }else{
+            return [select Id, Name, Site, AccountNumber, BillingStreet, BillingCity, BillingPostalCode, BillingState, BillingCountry,owner.alias, c2g__CODAIntercompanyAccount__c,IsPersonAccount,Phone from Account where (name LIKE :searchString or AccountNumber LIKE :searchString) and id = :accountId];
+        }
+    }
+
+    public static List<Account> getAccountByRecordTypeAndName(Id recordTypeId , String accountName) {
+        return [SELECT Id, Name
+                FROM Account
+                WHERE RecordTypeId =: recordTypeId
+                AND Name =: accountName];
+    }
+
+    public static List<Account> getMaxAccountNumberAccounts(String cidMaxNumber)
+    {
+        String cidNumberprefix = AccountRequestConstants.startingDigitCidNumber +'%';
+        return [SELECT AccountNumber
+                FROM Account
+                WHERE AccountNumber LIKE : cidNumberprefix and AccountNumber >=:cidMaxNumber and AccountNumber != NULL];
+    }
+
+    public static List<Account> getAgentInfoByAccountId(List<Id> AccountIDs){
+        return [SELECT Id,Name,Agent__c, Agent__r.Master_Agent__c, Agent__r.Super_Agent__c, RecordType.DeveloperName,
+                    Agent__r.RAC_Electronic__c,Agent__r.Master_Agent_Percent__c,Agent__r.Super_Agent_Percent__c,
+                    Master_Agent__c, Super_Agent__c, RecordType.Name, Update_Master_Super_Agent__c,IsPersonAccount,
+                    Agent__r.AccountID,Master_Agent__r.AccountID,Super_Agent__r.AccountID, BillingCountry,
+                    c2g__CODAAccountTradingCurrency__c, Agent__r.RAC_Manual__c, CurrencyIsoCode
+                FROM Account
+                WHERE Id in :AccountIDs];
+    }
+
+    public static List<Account> getAccountChangePPAList(List<Id> accountChangesId){
+        return [Select Id,Total_No_of_PPA__c,RecordType.Name, Contract_Seq_No__c, Digit_Limit__c
+                FROM Account
+                Where Id IN : accountChangesId];
+    }
+
+    public static List<Account> getListOfAccountsByRecordTypeAndAccountName(string accountName, string recordTypeDeveloperName) {
+        return [SELECT Id, Name, Type
+                FROM Account
+                WHERE Name =: accountName
+                AND RecordType.DeveloperName =: recordTypeDeveloperName];
+    }
+
+    public static Map<Id, Account> getMapOfAccounts(List<Account> newAccounts) {
+        Map<Id, Account> mapAccountDetails = new Map<Id, Account>(
+            [SELECT Id, Account.Name,
+                (SELECT Id, Repairer_Account__c , Account.Name
+                 FROM Account.Contacts
+                 WHERE RecordType.DeveloperName =: ContactConstants.RECORD_TYPE_FGI_CONTACT)
+             FROM Account
+             WHERE Id In : newAccounts]);
+        return mapAccountDetails;
+    }
+
+    public static List<Account> getAccountIdByAffinityPartnerId(String AffinityPartnerId) {
+        return [SELECT Id, Name
+                FROM Account
+                WHERE Affinity_Id__c = :AffinityPartnerId];
+    }
+
+    public static List<Account> getListOfAccountsByRecordTypeAndAccountPhone(Set<String> accountPhone, string recordTypeDeveloperName,
+        Set<Id> accountId, Set<String> accountCompanyEmail) {
+        return [SELECT Id, Name, Phone, Company_Email__c
+                FROM Account
+                WHERE Id Not IN : accountId
+                AND RecordType.DeveloperName =: recordTypeDeveloperName
+                AND (Phone IN : accountPhone OR Company_Email__c IN : accountCompanyEmail)];
+    }
+
+    public static Account getAccountRecordTypeById(Id accountId) {
+        return [
+            SELECT Id, RecordType.DeveloperName,Billing_Schedule_type__c,BillingCountry, 
+            AccountNumber, Classification_Code__c
+            FROM Account
+            WHERE Id =: accountId
+        ];
+    }
+    
+    public static List<Account> getAccountLaborRateById(Id accountId) {
+        return [SELECT Id, Labor_Rate__c FROM Account WHERE Id =: accountId];
+    }
+
+    public static List<Account> getAccountsListBySetOfRecordTypeIds(Set<Id> setOfRecordTypeIds) {
+        return [SELECT Id, RecordTypeId FROM Account WHERE ISFSW__c = TRUE AND RecordTypeId IN: setOfRecordTypeIds];
+    }
+
+    public static List<Account> getAccountByIndividualCasePayeeNames(Set<String> casePayeeNameSet) {
+        return [SELECT Id,Individual_Case_Payee_Name__c FROM Account WHERE Individual_Case_Payee_Name__c in : casePayeeNameSet];
+    }
+    public static List<Account> getAccountsWhereThisAccountIsSetAsAgent(Id agentContactId) {
+        return [SELECT Id, Name, Phone, Agent__c, Master_Agent__c, Super_Agent__c, AccountNumber, Dealer_Qualifier__c, Billing_City__c
+                FROM Account
+                WHERE Agent__r.Id = :agentContactId OR Master_Agent__r.Id = :agentContactId OR Super_Agent__r.Id = :agentContactId];
+    }
+
+    public static List<Account> getInfoByAccountId(List<Id> listOfAccountIds){
+        return [
+            SELECT Id,Name,RecordType.Name,Brand__c, Branding__c, RecordType.DeveloperName,Contract_Seq_No__c, Digit_Limit__c, 
+                ParentId, Missing_Prerequisites_Error__c, Default_Payment_Method__c, c2g__CODAAccountTradingCurrency__c, PersonEmail,
+                Account_Affinity_Id__pc, Lead_Source__pc, Parent.affinity_Id__c, BillingCountry, Country__c,
+                Accounting_Parent__c, Accounting_Parent__r.AccountNumber, AccountNumber, CurrencyIsoCode, Dealer_Status__c,
+                NumberOfCurrentPromotions__c, NumberOfPromotions__c, 
+                (SELECT Id, Billing_Type__c, Claim_Type__c FROM Accounts3__r),
+                (SELECT Id, Name, Quote_Dealer_Product__r.Dealer_Product__c FROM Contracts1__r),
+                (SELECT Id, CurrencyIsoCode FROM Dealer_Products__r WHERE Product_Status__c = :Label.Active)
+            FROM Account
+            WHERE Id IN :listOfAccountIds
+        ];
+    }
+
+    public static Account getDealerQualifierBrandByAccountID (Id accountId){
+        return [
+            SELECT Name, Dealer_Qualifier__c, Brand__c, Branding__c, Branding__r.Secondary_Color_1__c,
+            Branding__r.Manufacturer__c, toLabel(Branding__r.Search_Fields__c), toLabel(Branding__r.Claim_Search_Fields__c),
+            Branding__r.Body_Font_Style__c, Branding__r.Button_Text_Color__c, AccountNumber, Is_Web_Dealer__c, VAT_number__c, IPT_Exempt_Dealer__c,
+            Initial_Disclosure__c, Branding__r.Digital_Consent_Text__c,Enable_SODAN_Dashboard__c, ParentId, Parent.Freeze_Client_Fees__c
+            FROM Account
+            WHERE Id = :accountId
+        ];
+    }
+
+    public static Branding__c getBrandingByAccountBrand(){
+        Id accountId = ContactDAO.getContactByUserId().AccountId;
+        return [SELECT ID, Name, Logo__c, Brand_Color__c, Secondary_Color_1__c, Secondary_Color_2__c,
+                    Accent_Color__c, Logo_Background_Color__c,  Landing_Page_Image__c, Client_Intro_Text__c, 
+                    Search_Fields__c, Default_Search_Option__c, Disclaimer__c
+                FROM Branding__c
+                WHERE Id =:getDealerQualifierBrandByAccountID(accountId).Branding__c LIMIT 1];
+    }
+    
+    public static List<Branding__c> getListOfBrandingByAccountBrand(){
+        Id accountId = ContactDAO.getContactByUserId().AccountId;
+        return [
+            SELECT Id, Name, Logo__c, Brand_Color__c, Secondary_Color_1__c, Secondary_Color_2__c,
+                Accent_Color__c, Logo_Background_Color__c,  Landing_Page_Image__c, Client_Intro_Text__c,
+                Search_Fields__c, Default_Search_Option__c, GDPR_Applicable__c, Manufacturer__c, Button_Text_Color__c 
+            FROM Branding__c
+            WHERE Id =:getDealerQualifierBrandByAccountID(accountId).Branding__c
+        ];
+    }
+
+    public static List<Account> getAccountsByWritingCompanyCodes(Set<String> writingCompanyCodes) {
+        Id recordTypeId = RecordTypeDAO.getRecordTypeId('Non_Dealer','Account');
+        return [
+            SELECT Id, Writing_Company_Code__c
+            FROM Account
+            WHERE Writing_Company_Code__c IN : writingCompanyCodes
+                AND RecordTypeId = :recordTypeId
+                AND Type = :AccountConstants.WRITING_COMPANY
+        ];
+    }
+
+    public static List<Account> getAccountBySpecialID(String specialId){
+        return [SELECT Id, ParentId, Type, Special_Id__c FROM Account
+                WHERE Special_Id__c like :specialId + '%'];
+    }
+
+    public static Map<Id,Account> getAccountMapByRecordTypeDeveloperName(String recordTypeDeveloperName){
+        Map<Id,Account> clientsMap = new Map<Id,Account>([SELECT Id, Name, Contract_Type__c,
+                                                              Invoice_Due_Days__c, Affinity_Id__c, AccountNumber,
+                                                              RecordTypeId, Last_Contract_Sold_Date__c
+                                                          FROM Account
+                                                          WHERE RecordType.DeveloperName =:recordTypeDeveloperName]);
+        return clientsMap;
+    }
+
+    public static Map<Id,Account> getAccountMapByRecordTypeAndId(String recordTypeDeveloperName, Set<Id> accountIds){
+        return new Map<Id,Account>([
+                SELECT Id, Name, Contract_Type__c,Invoice_Due_Days__c, Affinity_Id__c, AccountNumber, Dealer_Status__c,
+                    RecordTypeId, Last_Contract_Sold_Date__c, Parent.Affinity_Id__c, BillingCountry, Customer_Number__c,
+                    Type, Billing_Street__c, Billing_Street_2__c, Billing_City__c, Billing_State__c, Billing_Zip__c, Tax_Id__c,
+                    Billing_Country__c, Agent__C, Master_Agent__c, Super_Agent__c
+                FROM Account
+                WHERE RecordType.DeveloperName =:recordTypeDeveloperName
+                AND Id IN : accountIds
+                ]);
+    }
+
+    public static Map<Id, Account> fswAccountMapById
+    {
+        get
+        {
+            if(fswAccountMapById == NULL)
+            {
+                fswAccountMapById = new Map<Id, Account>();
+            }
+            return fswAccountMapById;
+        }
+        set;
+    }
+
+    public static List<Account> getISFSWStatusOfAccountsForAccountIds(Set<Id> accountRecordIds){
+        Set<Id> newAccountIdList = new Set<Id>();
+        for(Id accountId : accountRecordIds){
+            if(!fswAccountMapById.containsKey(accountId)){
+                newAccountIdList.add(accountId);
+            }
+        }
+        if(!newAccountIdList.isEmpty()){
+            fswAccountMapById.putAll([SELECT Id, ISFSW__C
+                    FROM Account
+                    WHERE Id in : newAccountIdList]);
+        }
+        return fswAccountMapById.values();
+    }
+    
+
+     public static List<Account> getRepairFacilitiesForPPM(String classificationCode, String redemptionCode)
+    {
+      List<Account> accounts = new List<Account>();
+      Id DealerRT = RecordTypeDAO.getRecordType('Non_Dealer', 'Account').Id;
+      accounts = [SELECT a.Id, a.Name, a.AccountNumber, a.Phone, a.Dealer_Billing_Address__c,
+                      a.Redemption_Code__c, a.Classification_Code__c
+                  FROM Account a
+                  WHERE a.Redemption_Code__c LIKE :redemptionCode
+                  AND a.Classification_Code__c LIKE :classificationCode
+                  AND a.RecordTypeId = :DealerRT];
+                  return accounts;
+    }
+    
+    public static List<Account> getTaxIdForClientPayeeAccounts(){
+        RecordType clientFeePayeeRecordType = RecordTypeDAO.getRecordType(AccountConstants.RECORD_TYPE_NAME_CLIENT_FEE_PAYEE, 'Account');
+
+        return [
+            SELECT Tax_ID_N__c 
+            FROM Account 
+            WHERE RecordTypeId =: clientFeePayeeRecordType.Id
+        ];
+    }
+    
+    public static List<Account> getAccountsByIdsContractTypeAndRecordType(Set<Id> accountIdSet, Id recordTypeId, String contractType){
+        return [
+            SELECT Id 
+            FROM Account 
+            WHERE Id IN :accountIdSet AND RecordTypeId = :recordTypeId AND Contract_Type__c = :contractType
+        ];
+    }
+
+    public static List<Account> insertAccounts(List<Account> accounts)
+    {
+        insert accounts;
+        return accounts;
+    }
+
+    public static List<Account> updateAccounts(List<Account> accounts)
+    {
+        update accounts;
+        return accounts;
+    }
+    
+    public static List<Account> getAccountByHyperionNumber(String hyperionNumber)
+    {
+        return [SELECT Id, Name, Hyperion_Number__c, Classification_Code__c
+                FROM Account 
+                WHERE Hyperion_Number__c=:hyperionNumber 
+                LIMIT 1];
+    }
+    
+    public static Map<Id, Account> getAccountMapByRecordTypeId(String recordTypeId) {
+        return new Map<Id, Account>([
+            SELECT Id, Name, Contract_Type__c, Invoice_Due_Days__c, Affinity_Id__c, AccountNumber, RecordTypeId,
+                   Last_Contract_Sold_Date__c
+            FROM Account
+            WHERE RecordTypeId =: recordTypeId
+        ]);
+    }
+
+    public static List<Account> getAccountsByType(String recordTypeId, List<String> types) {
+        return [SELECT Id, Business_Type__c,Company_Email__c,Phone,
+                    (SELECT Id, Name,Phone,MailingStreet, MailingCity, MailingState, MailingPostalCode, MailingCountry
+                     FROM Contacts)  
+                FROM Account
+                WHERE Business_Type__c IN: types
+                AND RecordTypeId =: recordTypeId];
+    }
+
+    public List<Account> getListOfAccountsByRecordTypeIdAndAccountPhone(Set<String> accountPhone, Id recordTypeId,
+        Set<Id> accountId, Set<String> accountCompanyEmail) {
+        return [SELECT Id, Name, Phone, Company_Email__c
+                FROM Account
+                WHERE Id Not IN : accountId
+                AND RecordTypeId =: recordTypeId
+                AND (Phone IN : accountPhone OR Company_Email__c IN : accountCompanyEmail)];
+    }
+
+    public List<Account> getPersonAccountByUserAndRecordTypeDeveloperName(Id userId, String developerName) {
+        return [
+            SELECT Id, Single_Sign_On_User_Profile_Image_Url__pc, Registration_Step__pc, Rotation_Value__pc, CurrentUser__pc
+            FROM Account
+            WHERE CurrentUser__pc =: userId AND RecordType.DeveloperName =: developerName
+        ];
+    }
+
+    public static Id getAccountIdFromUser(User currentUser)
+    {
+        return currentUser.Contact.AccountId;
+    }
+
+    public static Id getAccountAgent(Account accountWAgent) {
+        return accountWAgent.Agent__c;
+    }
+
+    public static Decimal getAccountAgentRAC(Account accountWAgent) {
+        return accountWAgent.Agent__r.RAC_Electronic__c;
+    }
+
+    public static Decimal getAccountMasterAgentPercent(Account accountWAgent) {
+        return accountWAgent.Agent__r.Master_Agent_Percent__c;
+    }
+    
+    public static Decimal getAccountSuperAgentPercent(Account accountWAgent) {
+        return accountWAgent.Agent__r.Super_Agent_Percent__c;
+    }
+    
+    public List<Account> getWarehouseAccountsByRecordTypeIdStatusAndCountry(String recordTypeId, String country, String status) {
+        return [
+            SELECT Id, Name, ShippingStreet, ShippingCity, ShippingState, ShippingPostalCode, ShippingCountry,
+                Territories_Serviced__c 
+            FROM Account 
+            WHERE RecordType.Id = :recordTypeId AND Territories_Serviced__c includes (:country) AND Status__c = :status
+        ];
+    }
+    
+    public static List<Account> getFSWNAAutoAccountByAccountIdSet(Set<Id> accountIdSet){
+        String naAutoCompanyName = FF_Company_Name__c.getInstance().NA_BP_Auto_Company_Name__c;
+        return [SELECT Id FROM Account WHERE Id IN :accountIdSet AND ISFSW__c = true AND FF_Company__r.Name = :naAutoCompanyName];
+    }
+
+    public static List<Account> getAccountCreditUnion(String accountName){
+        Id DealerRT = RecordTypeDAO.getRecordType('Dealer', 'Account').Id;
+        return [SELECT Id, Name, Credit_Union_Financial_Institution__c, billingState, BillingCountry
+                FROM Account
+                WHERE Name = : accountName
+                AND RecordTypeId = :DealerRT];
+    }
+
+    public static Map<Id, Account> getMapOfAccountByIds(Set<Id> setOfAccountIds) {
+        return new Map<Id, Account>([
+            SELECT Id, Billing_Schedule_Type__c, Parent.Billing_Schedule_Type__c, ISFSW__c, BillingCountry,
+                Parent.Billing_Type__c, Billing_Type__C, Default_Payment_Method__c, Writing_Company__c,
+                RDG_Nbr__c, Is_Billing_Statement_Batch_Running__c, FF_Company__c, FF_Company__r.Name, Branding__r.Name,
+                CurrencyIsoCode,Clabe_Number__c, Branding__r.Manufacturer__c,Ultimate_Parent__r.Is_Billing_Statement_Batch_Running__c,
+                Ultimate_Parent__c, Account_Number_Type__c, Contract__c, Contract__r.Channel__c
+            FROM Account
+            WHERE Id IN :setOfAccountIds
+        ]);
+    }
+    
+    public static List<Account> getAccountsByContractTypeAndRecordType(Id recordTypeId, String contractType){
+        return [
+            SELECT Id, Name 
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId 
+            AND Contract_Type__c = :contractType
+        ];
+    }
+    
+    public List<Account> getListOfPersonAccountsByBrandingAndEmailAddress(
+        String customerBranding, String customerEmail, String lastName, Id recordTypeId) {
+            
+        return [
+            SELECT Id 
+            FROM Account 
+            WHERE RecordTypeId = :recordTypeId 
+                AND Customer_Branding__c = :customerBranding
+                AND PersonEmail = :String.escapeSingleQuotes(customerEmail)
+                AND LastName = :String.escapeSingleQuotes(lastName) 
+        ];
+    }
+
+    public static List<Account> getListOfAccountWithContractsByAccountId(List<Id> AccountId){
+        return [
+            SELECT Name,AccountNumber,currencyISOCode, Id, FirstName, LastName, PersonMobilePhone, LastModifiedDate,
+                ISFSW__c,Parent.Id,
+                (SELECT id, name, Contract_Start_Date__c,Account_name__c, Account_name__r.name, Total_Number_of_Services__c,
+                     No_of_Redeemed_Services__c, Status__c
+                 FROM Contracts__r
+                 WHERE Status__c =: AccountConstants.ACCOUNT_STATUS_ACTIVE AND 
+                     Contract_Type_new__c =: AccountConstants.ACCOUNT_CONTRACT_TYPE_PREPAID_MAINTENANCE
+                 ORDER BY Account_name__r.name, Contract_Start_Date__c)
+            FROM Account
+            WHERE Id IN: AccountId
+        ];
+    }
+
+    public static List<Account> getAccountsForNPDPCheck(Set<Id> accountIds)
+    {
+        return [SELECT Id, NPDP_Account__c, Classification_Code__c, Branding__r.Contract_Load__c, 
+                Branding__r.Default_Customer_Details__c, Company_Email__c, Default_Payment_Method__c, VAT_Number__c,
+                RecordType.DeveloperName, Parent.Name, Name
+            FROM Account
+            WHERE Id IN :accountIds];
+    }
+    
+    public static List<Account> getAccountsForAgentId(Id agentContactId) {
+        return [SELECT Id, Name, Phone, AccountNumber, Dealer_Status__c, Dealer_Qualifier__c
+                FROM Account
+                WHERE Agent__r.Id = :agentContactId];
+    }
+    
+    public static List<Account> getAccountsWhereThisAccountIsSetAsMasterSuperAgent(Id agentContactId) {
+        return [SELECT Id, Name, Phone, PersonEmail, Agent__c
+                FROM Account
+                WHERE Master_Agent__r.Id = :agentContactId OR Super_Agent__r.Id = :agentContactId];
+    }
+    
+    public static Account getRelatedContractsByPersonAccountId (Id personAccountId, Id quoteId) {
+        return [
+            SELECT Id, Salutation, FirstName, LastName, BillingStreet, BillingState, BillingCity, BillingPostalCode,
+                PersonMailingStreet, PersonMailingState, PersonMailingCity, PersonMailingPostalCode, PersonEmail,
+                PersonMobilePhone, Phone,
+                (SELECT Id, Title__c, Holder_First_Name_INT__c, Holder_Last_Name_INT__c, 
+                    Customer_Phone__c, Mobile_Phone__c, Holder_Postal_Code_INT__c, House_number_House_name__c,
+                    House_number__c, House_name__c, Post_code__c, Holder_Address_1_INT__c, Holder_Address_2_INT__c,
+                    Holder_City_INT__c, County__c, Holder_Email_Address_INT__c, Account_Name__r.Release_2_Quoting_Pilot__c,
+                    Account_Name__r.ISFSW__c, Status__c, Quote_Dealer_Product__r.Quote__c,
+                    Quote_Dealer_Product__r.Dealer_Product__r.Associated_Dealer_Product_1__c,
+                    Quote_Dealer_Product__r.Dealer_Product__r.Associated_Dealer_Product_2__c, Policy_Status__c , RecordTypeId
+                FROM Contracts1__r
+                WHERE Quote_Dealer_Product__r.Quote__c != :quoteId AND Bundled__c = false 
+                    AND RecordType.developerName != : ContractConstants.SNAPSHOT_RECORD_TYPE_NAME) 
+            FROM Account 
+            WHERE Id = :personAccountId
+        ];
+    }
+
+    public static Account getAccountFSWRDGNumberAndAccountNumberById(Id accountID) {
+        return [SELECT Id, AccountNumber, ISFSW__c, RDG_Nbr__c FROM Account WHERE Id = :accountID];
+    }
+
+    public static Map<Id, Account> getIdAccountMapByIds(Set<Id> accountIdSet) {
+        return new Map<Id, Account>([SELECT Id, Name, Parent.Name, Parent.Affinity_Id__c, AccountNumber, Affinity_Id__c,
+                                        Classification_Code__c
+                                    FROM Account
+                                    WHERE Id IN :accountIdSet]);
+    }
+    
+    public static List<Account> getAccountsByClassificationCodes(Set<Id> classificationCodeIds) {
+      return [
+        SELECT Id, Name, CC_Lookup__c , Classification_Code__c, Classification_Code_New__c, 
+            CC_Lookup__r.Classification_Code__c
+        FROM Account
+        WHERE CC_Lookup__c IN: classificationCodeIds
+        ];
+    }
+
+    public static List<Account> getNearestARServiceCentersByProductLocation(Location productLocation, Integer rangeOfSearch, 
+        Integer quantityOfRecords, Set<Id> serviceCenterIds){
+        Decimal productLatitude = productLocation.getLatitude();
+        Decimal productLongitude = productLocation.getLongitude();
+        List<Account> accounts = new List<Account>();
+        Id serviceCenterRecordTypeId = RecordTypeDAO.getRecordType('AR_Service_Center', 'Account').Id;
+
+        accounts = [SELECT Id, Name, Billing_GeoLocation__Latitude__s , Billing_GeoLocation__Longitude__s 
+                    FROM Account
+                    WHERE DISTANCE(Billing_GeoLocation__c,GEOLOCATION(:productLatitude, :productLongitude), 'km') < :rangeOfSearch
+                    AND RecordTypeId = :serviceCenterRecordTypeId AND Id in: serviceCenterIds
+                    LIMIT :quantityOfRecords];
+
+        return accounts;
+    }
+    
+    public static List<Account> getDealerGroupAccountsByAccountIds(List<Id> listOfAccountIds){
+        return [
+            SELECT Id, Branding__r.Contract_Load__c
+            FROM Account
+            WHERE Id IN :listOfAccountIds
+                AND (Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_GROUP
+                OR Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_DEALER_GROUP
+                OR Claim_Type__c = :AccountConstants.ACCOUNT_CLAIM_TYPE_DEALER_GROUP)
+        ];
+    }
+    
+    public static List<Account> getListOfPersonAccountsByBrandingAndPostCode(
+        String customerBranding, String postCode, String lastName, Id recordTypeId) {
+
+        return [
+            SELECT Id
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId
+                AND Customer_Branding__c = :customerBranding
+                AND BillingPostalCode = :String.escapeSingleQuotes(postCode)
+                AND LastName = :String.escapeSingleQuotes(lastName)
+        ];
+    }
+    
+    public static List<Account> getOrderedARServiceCentersByProductLocation(Location productLocation,
+        Id serviceCenterRecortypeId, Set<Id> serviceCenterIds) {
+        Decimal productLatitude = productLocation.getLatitude();
+        Decimal productLongitude = productLocation.getLongitude();
+
+        return [SELECT Id, Name, Billing_GeoLocation__Latitude__s , Billing_GeoLocation__Longitude__s
+                   FROM Account
+                   WHERE DISTANCE(Billing_GeoLocation__c,GEOLOCATION(:productLatitude, :productLongitude), 'km') > 0
+                   AND RecordTypeId = :serviceCenterRecortypeId AND Id in: serviceCenterIds
+                   ORDER BY DISTANCE(Billing_GeoLocation__c,GEOLOCATION(:productLatitude, :productLongitude), 'km')];
+    }
+    
+    public static List<Account> getOrderedServiceCenterByCoverageArea(Set<Id> serviceCenterIds, Location productLocation){
+
+        Decimal productLatitude = productLocation.getLatitude();
+        Decimal productLongitude = productLocation.getLongitude();
+
+        return [SELECT Id, Name, Billing_GeoLocation__Latitude__s , Billing_GeoLocation__Longitude__s, Client_Status__c,
+                    AccountNumber, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode,
+                    Goodwill_Claims__c FROM Account
+                    WHERE Id in: serviceCenterIds AND Is_Service_Center_Active__c = true
+                    AND Billing_GeoLocation__Latitude__s != null AND Billing_GeoLocation__Longitude__s != null
+                    ORDER BY DISTANCE(Billing_GeoLocation__c,GEOLOCATION(:productLatitude, :productLongitude), 'km')];
+    }
+    
+    public static List<Account> getOrderedAndNearestServiceCenterByCoverageArea(Set<Id> serviceCenterIds,
+        Location productLocation, Integer rangeOfSearch){
+
+        Decimal productLatitude = productLocation.getLatitude(); 
+        Decimal productLongitude = productLocation.getLongitude();
+
+        return [SELECT Id, Name, Billing_GeoLocation__Latitude__s , Billing_GeoLocation__Longitude__s, BillingStreet,
+                    BillingCity, BillingState, BillingCountry, BillingPostalCode, Goodwill_Claims__c
+                    FROM Account
+                    WHERE Id in: serviceCenterIds AND
+                    DISTANCE(Billing_GeoLocation__c,GEOLOCATION(:productLatitude, :productLongitude), 'km') < :rangeOfSearch
+                    ORDER BY DISTANCE(Billing_GeoLocation__c,GEOLOCATION(:productLatitude, :productLongitude), 'km')];
+    }
+        
+    public List<Account> getListOfPersonAccountsByBrandingAndMobileNumber(String customerBranding, String mobNumber, 
+        String lastName, String customerFirstName, String customerCountry, Id recordTypeId) {
+
+        return [
+            SELECT Id
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId
+                AND Customer_Branding__c = :customerBranding
+                AND Phone = :String.escapeSingleQuotes(mobNumber)
+                AND FirstName = :String.escapeSingleQuotes(customerFirstName)
+                AND LastName = :String.escapeSingleQuotes(lastName)
+                AND Billing_Country__c = :String.escapeSingleQuotes(customerCountry)
+        ];
+    }
+    
+    public List<Account> getListOfPersonAccountsByBrandingAndEmailAddress(String customerBranding, String customerEmail, 
+            String lastName, String customerFirstName, String customerCountry, Id recordTypeId) {
+        
+        return [
+            SELECT Id 
+            FROM Account 
+            WHERE RecordTypeId = :recordTypeId 
+                AND Customer_Branding__c = :customerBranding
+                AND PersonEmail = :String.escapeSingleQuotes(customerEmail)
+                AND FirstName = :String.escapeSingleQuotes(customerFirstName)
+                AND LastName = :String.escapeSingleQuotes(lastName)
+                AND Billing_Country__c = :String.escapeSingleQuotes(customerCountry)
+        ];  
+    }
+    
+    public static List<Account> getDefaultAccountForOilType(){
+        return [SELECT Id 
+                FROM Account 
+                WHERE Name = :AccountConstants.ACCOUNT_AN_FORD_FRISCO
+                LIMIT 1];
+    }   
+    
+    public static List<Account> getunBilledChildAccountsByUltimateParent(Set<Id> ultimateParentAccountIds) {
+        Set<Id> accountIds = new Set<Id>();
+        for(Integer i=0;i<5;i++){
+            List<AggregateResult> results =  [
+                SELECT Client__c
+                FROM Billing_Item__c
+                WHERE SIN_Index__c = :BillingItemConstants.BILLING_SALES_INVOICE_BLANK AND
+                    (Statement_Type__c = :BillingItemConstants.STATEMENT_TYPE_ITEM_BALANCE OR
+                        Statement_Type__c = :BillingItemConstants.STATEMENT_TYPE_ACTIVITY_BALANCE)
+                    AND Client__r.Ultimate_Parent__c IN :ultimateParentAccountIds AND 
+                    (Client__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE OR
+                    Client__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE_DOOC)
+                    AND Client__c NOT IN :accountIds
+                    GROUP BY Client__c
+            ];
+            accountIds.addAll(Pluck.ids('Client__c',results));
+            
+            if(results.size()<2000)
+                break;
+        }
+        return getAccountsIds(accountIds);
+    }
+
+    public static  List<Account> getAccountsIds(Set<Id> accountIds) {
+        return [
+            SELECT Id, Name, ParentId, Billing_Schedule_Type__c, Parent.Billing_Schedule_Type__c,
+                Parent.Billing_Type__c,Billing_Type__c,BillingStreet,BillingCity,BillingState,
+                BillingPostalCode,BillingCountry,Phone,RecordType.DeveloperName, ISFSW__c, FF_Company__c, FF_Company__r.Name
+            FROM Account
+            WHERE Id IN :accountIds   
+        ];
+    }
+
+    public List<Account> getChildAccountsByUltimateParent(Set<Id> ultimateParentAccountIds) {
+        return [
+            SELECT Id, Name, ParentId, Billing_Schedule_Type__c, Parent.Billing_Schedule_Type__c,
+                Parent.Billing_Type__c,Billing_Type__c,BillingStreet,BillingCity,BillingState,
+                BillingPostalCode,BillingCountry,Phone,RecordType.DeveloperName, ISFSW__c, FF_Company__c, FF_Company__r.Name
+            FROM Account
+            WHERE Ultimate_Parent__c IN :ultimateParentAccountIds AND 
+                Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE AND 
+                Id IN (SELECT Client__c FROM Billing_Item__c WHERE SIN_Index__c = :BillingItemConstants.BILLING_SALES_INVOICE_BLANK AND
+                        (Statement_Type__c = :BillingItemConstants.STATEMENT_TYPE_ITEM_BALANCE OR
+                        Statement_Type__c = :BillingItemConstants.STATEMENT_TYPE_ACTIVITY_BALANCE))
+        ];
+    }
+
+    public List<Account> getChildAccountsByParentWhichHasUninvoicedBillingItem(Set<Id> parentAccountIds) {
+        return [SELECT Id, Billing_Schedule_Type__c, ISFSW__c, FF_Company__c, FF_Company__r.Name, RecordType.DeveloperName
+                FROM Account
+                WHERE ParentId IN : parentAccountIds AND
+                    Id IN (SELECT Client__c FROM Billing_Item__c WHERE SIN_Index__c = :BillingItemConstants.BILLING_SALES_INVOICE_BLANK AND
+                            (Statement_Type__c = :BillingItemConstants.STATEMENT_TYPE_ITEM_BALANCE OR
+                            Statement_Type__c = :BillingItemConstants.STATEMENT_TYPE_ACTIVITY_BALANCE))];
+    }
+
+    public List<Account> getAccountsBySearchKeyword(String searchKeyword, String dealerGroupName) {        
+        return [
+            SELECT Id, Name, AccountNumber, BillingPostalCode, BillingState
+            FROM Account
+            WHERE (
+                    Name like : '%' + searchKeyword + '%'
+                    OR AccountNumber like : searchKeyword + '%'
+                    OR BillingPostalCode like : searchKeyword + '%'
+                    OR BillingState like : searchKeyword + '%'
+                )
+                AND Dealer_Group_Name__c =: dealerGroupName
+                AND Status__c =: AccountConstants.ACCOUNT_STATUS_ACTIVE
+            LIMIT 10
+        ];
+    }
+    
+    public List<Account> getWritingCompaniesWithObligor(Set<Id> writingCompanyIds){
+        return [
+            SELECT Id,  Obligor__c
+            FROM Account 
+            WHERE Id in :writingCompanyIds 
+                AND Obligor__c != null
+        ];
+    }
+    
+    public static List<Account> getPrimaryOrAdditionalAccounts(Set<Id> accountIds){
+        return [
+            SELECT Id, Name, AccountNumber, BillingState, Phone, ISFSW__c
+            FROM Account 
+            WHERE Id in :accountIds
+        ];
+    }
+    
+    public static List<Account> getSharedAccountsByNameOrAccountNumber(Set<Id> accountIds, String name, String accountNumber){
+        List<Account> accounts = new List<Account>();
+        if(name.trim() == ''){ name = null;} else {name = '%'+ name + '%';}
+        if(name != null){
+            accounts = [SELECT Id, Name, AccountNumber, BillingState, Phone, IsFSW__c 
+                        FROM Account 
+                        WHERE (Name LIKE :name OR AccountNumber LIKE :name)
+                        AND Id IN: accountIds];
+            if(accounts.size() == 0){
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,System.label.Text_No_Result_Found_Modify_Search_Criteria));
+            }
+        }
+        return accounts;
+    }
+
+    public static List<Account> getAccountList(String searchValue) {
+        searchValue = searchValue.replace('\'','%');
+        searchValue = String.escapeSingleQuotes(searchValue) + '%';
+        String companyName = FF_Company_Name__c.getInstance().NA_BP_Auto_Company_Name__c;
+        Set<Id> recordTypeSet = new Set<Id>{AccountConstants.ACCOUNT_DEALER_RECORD_TYPE_ID,
+            AccountConstants.ACCOUNT_DEALER_GROUP_RECORD_TYPE_ID};
+        return [
+            SELECT Id, Name, AccountNumber, RDG_Nbr__c, Account_Number_Type__c, Client_Status_New__c, Billing_Type__c, Billing_Schedule_Type__c
+            FROM Account 
+            WHERE ISFSW__c = true 
+            AND FF_Company__r.Name = :companyName 
+            AND (Name LIKE :searchValue OR AccountNumber LIKE :searchValue)
+            AND recordTypeId IN :recordTypeSet LIMIT 100
+        ];
+    }
+    
+    public static List<Account> getPayeeAccountList(String searchValue) {
+        searchValue = searchValue.replace('\'','%');
+        searchValue = String.escapeSingleQuotes(searchValue) + '%';
+        Set<Id> recordTypeSet = new Set<Id>{AccountConstants.ACCOUNT_PAYEE_RECORD_TYPE_ID};
+        return [
+            SELECT Id, Name, Payee_Number__c, RDG_Nbr__c, Account_Number_Type__c, Client_Status_New__c, Billing_Type__c
+            FROM Account 
+            WHERE (Name LIKE :searchValue OR Payee_Number__c LIKE :searchValue)
+            AND recordTypeId IN :recordTypeSet LIMIT 100
+        ];
+    }
+    
+    public List<Account> getChildAccountsByParentAccountName(String parentAccountName){
+        return [SELECT Id, Name 
+                FROM Account 
+                WHERE Parent.Name =: parentAccountName];        
+    }
+    
+    public List<Account> getParentAccountsByBillingCountry(String billingCountry, Id recordTypeId){
+        return [SELECT Id, Name 
+                FROM Account 
+                WHERE BillingCountry =: billingCountry
+                    AND Parent.id = null
+                    AND RecordtypeId =: recordTypeId
+                    AND Type =: AccountConstants.ACCOUNT_TYPE_IN_NETWORK];
+    }
+    
+    public static List<Account> upsertAccountList(List<Account> listOfAccount){
+        upsert listOfAccount;
+        return listOfAccount;
+    } 
+
+    public Map<Id, Account> getAccountBillingTypeByAccountIds(Set<Id> accountIds) {
+        return new Map<Id, Account>([
+            SELECT Id, Billing_Type__c, Ultimate_Parent__c, Ultimate_Parent__r.Billing_Type__c
+            FROM Account
+            WHERE Id IN :accountIds
+        ]);
+    }
+
+    public static List<Account> getAccountByNumber(String accountNumber) {
+        accountNumber = String.escapeSingleQuotes(accountNumber)+ '%';
+        String companyName = FF_Company_Name__c.getInstance().NA_BP_Auto_Company_Name__c; 
+        Set<Id> recordTypeSet = new Set<Id>{AccountConstants.ACCOUNT_DEALER_RECORD_TYPE_ID, 
+            AccountConstants.ACCOUNT_DEALER_GROUP_RECORD_TYPE_ID};
+        return [
+            SELECT Id, Name, AccountNumber, ISFSW__c, RecordTypeId, Writing_Company__c, Billing_Type__c  
+            FROM Account 
+            WHERE ISFSW__c = true AND FF_Company__r.Name = :companyName AND AccountNumber LIKE :accountNumber 
+                AND recordTypeId In :recordTypeSet
+        ];
+    }
+
+    public static List<Account> getLastBillingStatementsByAccountIds(List<Id> clientIdList) {
+        return [
+            SELECT Id, 
+                (SELECT Id, Client_Name__c, Statement_Id__c 
+                FROM Billing_Statements__r 
+                WHERE Client_Name__c IN :clientIdList AND Statement_Id__c!=null 
+                ORDER BY createdDate desc 
+                LIMIT 1)
+            FROM Account
+            WHERE Id IN :clientIdList
+        ];
+    }
+    
+    public  Map<Id,Account> getAccountDetailsByParentId(List<String> parentAccountIds,String dealerGroupName,String recordTypeId) {
+        return new Map<Id,Account>([
+            SELECT Id, Name, ParentId, AccountNumber, Store_Number__c, Type, Parent.Name, Parent.AccountNumber
+            FROM Account
+            WHERE (RecordTypeId =: recordTypeId
+            OR Parent.RecordTypeId =: recordTypeId)
+            AND (ParentId IN : parentAccountIds
+            OR ID IN: parentAccountIds)
+            AND (Dealer_Group_Name__c =: dealerGroupName
+            OR Parent.Dealer_Group_Name__c =: dealerGroupName)
+            ]);
+    }
+    
+    public List<Account> getAccountDetailsByAccountNumber(List<String> parentAccountIds,List<String> retailerCodes,
+        String dealerGroupName,String recordTypeId) {
+        return new List<Account>([
+            SELECT Id, Name, ParentId, AccountNumber, Store_Number__c
+            FROM Account
+            WHERE RecordTypeId =: recordTypeId 
+            AND AccountNumber IN: retailerCodes
+            AND (ParentId IN: parentAccountIds
+            OR ID IN: parentAccountIds)
+            AND (Dealer_Group_Name__c =: dealerGroupName
+            OR Parent.Dealer_Group_Name__c =: dealerGroupName)
+            ]);
+    }
+    
+    public static List<Account> getAccountsByAccIds(Set<String> accids) {
+        return [
+            SELECT Id, AccountNumber , Name, RDG_Nbr__c, Dealer_Status__c, ParentId, Client_Group_ID__c,CSO_Credit__c,
+                c2g__CODAAccountsPayableControl__c, c2g__CODAAccountTradingCurrency__c, RecordTypeId, Amenities__c, 
+                ShippingCity,ShippingPostalCode, ShippingState, ShippingStreet, First_Name__c,  Last_Name__c, ShippingCountry,
+                BillingCity,BillingPostalCode, BillingState, BillingStreet, BillingCountry
+            FROM Account 
+            WHERE id IN: accids];
+    }
+    
+    public static Map<Id, Account> getPersonAccountInfoByIds(Set<Id> accountIds) {
+        return new Map<Id,Account>([
+            SELECT Id, FirstName, LastName, PersonEmail, PersonContactId,Salutation,
+                PersonMailingStreet, PersonMailingState, PersonMailingCity, PersonMailingCountry,
+                PersonMailingPostalCode, PersonMobilePhone
+            FROM Account
+            WHERE Id IN: accountIds AND IsPersonAccount = true
+        ]);
+    }
+
+    public static Map<Id, Account> getEUNonDealerDuplicateAccount(Set<String> accountName, Set<String> billingPostalCode, 
+        Set<String> companyEmail, String recordTypeId, Set<Id> setOfAccountId) {
+            
+        return new Map<Id,Account>([
+            SELECT Id, Name, type, Company_Email__c, Phone_Formula__c, Phone, W9_Method__c, BillingCity, BillingCountry,
+                BillingState, BillingStreet, BillingPostalCode, AccountNumber, Owner.FirstName, Owner.LastName, 
+                Client_Status_Formula__c, W9_On_File__c, Account_Email__c, Classification_Code__c, IsFSW__c 
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId 
+                AND Id NOT IN :setOfAccountId
+                AND Name IN :accountName 
+                AND BillingPostalCode IN :billingPostalCode
+                AND Company_Email__c IN :companyEmail
+        ]);
+    }
+    
+    public static List<Account> upsertAccounts(List<Account> accounts)
+    {
+        upsert accounts;
+        return accounts;
+    }
+    
+    public static List<Account> getAccountsByAffinityIds(Set<String> affinityIds){
+        return [
+            SELECT Id, Name
+            FROM Account
+            WHERE Affinity_Id__c IN:affinityIds 
+       ];
+    }
+    
+    public static Map<String, Account> getAccountByAccountNumberAndRecordType(Set<String> accountNumber, Id accountRecordTypeId){
+        Map<String, Account> accountNumberToAccountMap = new Map<String, Account>();
+        List<Account> accounts = [SELECT Id, Name, RecordTypeId, AccountNumber, Company_Email__c, Clabe_Number__c,
+                                      Client_Legal_Name__c, BillingStreet, BillingState, BillingCountry, BillingCity,
+                                      BillingPostalCode, PersonMailingPostalCode, Default_Payment_Method__c, Payment_Method__c,
+                                      FF_Company__c, c2g__CODABankSWIFTNumber__c, c2g__CODABankSortCode__c,
+                                      c2g__CODABankAccountName__c, c2g__CODABankAccountNumber__c, Classification_Code__c,
+                                      c2g__CODAAccountsPayableControl__c, c2g__CODADefaultExpenseAccount__c,
+                                      c2g__CODATaxCalculationMethod__c, c2g__CODAAccountTradingCurrency__c,
+                                      ParentId, Writing_Company__c, ISFSW__c, LastName, FirstName, MiddleName,
+                                      Parent.AccountNumber
+                                  FROM Account
+                                  WHERE AccountNumber IN: accountNumber
+                                      AND RecordTypeId =: accountRecordTypeId];
+                    
+        for(Account accountRecord : accounts){
+            accountNumberToAccountMap.put(accountRecord.AccountNumber, accountRecord);
+        }
+        
+        return accountNumberToAccountMap;
+    }
+
+    public static Map<String, Account> getPersonAccountByAccountNumberAndRecordType(Set<String> accountNumber, 
+        Id accountRecordTypeId){
+        Map<String, Account> accountNumberToAccountMap = new Map<String, Account>();
+        List<Account> accounts = [SELECT Id, RecordTypeId, AccountNumber, Company_Email__c, Clabe_Number__c,
+                                      Client_Legal_Name__c, BillingStreet, BillingState, BillingCountry, BillingCity,
+                                      BillingPostalCode, PersonMailingPostalCode, Default_Payment_Method__c, Payment_Method__c,
+                                      FF_Company__c, c2g__CODABankSWIFTNumber__c, c2g__CODABankSortCode__c,
+                                      c2g__CODABankAccountName__c, c2g__CODABankAccountNumber__c,
+                                      c2g__CODAAccountsPayableControl__c, c2g__CODADefaultExpenseAccount__c,
+                                      c2g__CODATaxCalculationMethod__c, c2g__CODAAccountTradingCurrency__c,
+                                      ParentId, Writing_Company__c, ISFSW__c, LastName, FirstName, MiddleName,
+                                      Parent.AccountNumber
+                                  FROM Account
+                                  WHERE AccountNumber IN: accountNumber AND isPersonAccount = true
+                                      AND RecordTypeId =: accountRecordTypeId];
+        for(Account accountRecord : accounts){
+            accountNumberToAccountMap.put(accountRecord.AccountNumber, accountRecord);
+        }
+        return accountNumberToAccountMap;
+    }
+    
+    public static List<Account> getAccountByRecordTypeAndEmail(String recordTypeName , String email) {
+        return [SELECT Id, Name, personEmail
+                FROM Account
+                WHERE RecordType.developerName =: recordTypeName
+                AND personEmail =: email];
+    }   
+    
+    public static List<Account> getListOfChildAccounts(Set<Id> setOfAccountRecordTypeId, Set<Id> setOfParentAccountIds) {
+        return [
+            SELECT Id, Name, ParentId, Billing_Schedule_Type__c, Billing_Type__c, Payment_Schedule_Type__c,
+                Claim_Type__c, Branding__r.Manufacturer__c
+            FROM Account
+            WHERE RecordTypeId IN :setOfAccountRecordTypeId
+                AND ParentId IN :setOfParentAccountIds
+        ];
+    }
+
+    public static List<Account> getLienholderAccountsByName(String accName)
+    {
+        return [SELECT Id, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry
+            FROM Account
+            WHERE RecordType.DeveloperName =: AccountConstants.LIENHOLDER_RECORD_TYPE_DEVELOPER_NAME
+            AND Name LIKE: '%' + accName + '%'];
+    }
+    
+    public List<Account> getListOfPersonAccountsByBrandingAndEmailAddress(String customerBranding, String customerEmail,
+        String lastName, String customerFirstName, String customerCountry, Id recordTypeId,
+        String postCode, String billingStreet) {
+
+        return [
+            SELECT Id, Opt_out_of_all_Marketing__c, BillingCountry
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId
+                AND Customer_Branding__c = :customerBranding
+                AND PersonEmail = :String.escapeSingleQuotes(customerEmail)
+                AND FirstName = :String.escapeSingleQuotes(customerFirstName)
+                AND LastName = :String.escapeSingleQuotes(lastName)
+                AND Billing_Country__c = :String.escapeSingleQuotes(customerCountry)
+                AND BillingPostalCode = :String.escapeSingleQuotes(postCode)
+                AND BillingStreet = :String.escapeSingleQuotes(billingStreet)
+        ];
+    }
+
+    public List<Account> getListOfPersonAccountsByBrandingAndMobileNumber(String customerBranding, String mobNumber,
+        String lastName, String customerFirstName, String customerCountry, Id recordTypeId,
+        String postCode, String billingStreet) {
+
+        return [
+            SELECT Id, Opt_out_of_all_Marketing__c, BillingCountry
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId
+                AND Customer_Branding__c = :customerBranding
+                AND Phone = :String.escapeSingleQuotes(mobNumber)
+                AND FirstName = :String.escapeSingleQuotes(customerFirstName)
+                AND LastName = :String.escapeSingleQuotes(lastName)
+                AND Billing_Country__c = :String.escapeSingleQuotes(customerCountry)
+                AND BillingPostalCode = :String.escapeSingleQuotes(postCode)
+                AND BillingStreet = :String.escapeSingleQuotes(billingStreet)
+        ];
+    }
+
+    public List<Account> getListOfPersonAccountsByRecordTypeAndUltimateParentAccountAndCasePayeeNames(Set<Id> parentAccountIdSet, Id recordTypeId,
+        Set<String> casePayeeNameSet) {
+        return [
+            SELECT Id, c2g__CODAAccountsPayableControl__c, Ultimate_Parent__c, c2g__CODAAccountTradingCurrency__c,
+                Individual_Case_Payee_Name__c
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId AND Individual_Case_Payee_Name__c IN :casePayeeNameSet
+                AND Ultimate_Parent__c IN :parentAccountIdSet AND isPersonAccount = true
+        ];
+    }
+    
+    public List<Account> getListOfPersonAccountsByRecordTypeAndUltimateParentAccount(Set<Id> parentAccountIdSet, Id recordTypeId) {
+        return [
+            SELECT Id, c2g__CODAAccountsPayableControl__c, c2g__CODAAccountTradingCurrency__c, Ultimate_Parent__c, FirstName, 
+                LastName, BillingCity, BillingState, BillingCountry, BillingPostalCode, BillingStreet, PersonEmail 
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId AND Ultimate_Parent__c IN :parentAccountIdSet AND isPersonAccount = true
+        ];
+    }
+    
+    public Account getAccountIdByAccountNumber(String accountNumber){
+        return [SELECT Id, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry,
+                    Billing_GeoLocation__Latitude__s, Billing_GeoLocation__Longitude__s
+                FROM Account
+                WHERE AccountNumber =: accountNumber
+                LIMIT 1];     
+    }
+
+    public static List<Account> getEUFinanceAccountsByRecordTypeAndType(Id recordTypeId, String accountType, 
+        String accountName) {
+            
+        return [
+            SELECT Id, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry, 
+                Phone, Account_Email__c, Default_Payment_Method__c, Company_Email__c
+            FROM Account
+            WHERE RecordTypeId = :recordTypeId
+               AND Type = :accountType
+               AND Name LIKE: '%' + accountName + '%'
+        ];
+    }
+    
+    public static Account getAccountAddressById(String accountId){
+        return [
+            SELECT ShippingStreet, ShippingPostalCode, ShippingCountry, BillingStreet, 
+                BillingPostalCode, BillingCountry, Address_Verified__c
+            FROM Account
+            WHERE Id =: accountId 
+            LIMIT 1
+        ];
+    }    
+    
+    public Map<Id, Account> getLatestBillingStatementsByAccountIds(List<Account> accountList) {
+        return new Map<Id, Account> ([
+            SELECT Id, 
+                (SELECT Id, Client_Name__c, RecordTypeId, Client_Number__c, Balance_due_this_period__c, Date_Billed__c, Statement_Date__c,
+                    From_Date__c, To_Date__c, Due_Date__c, Payment_Status__c, Previous_Balance__c, Current_Balance__c, 
+                    Account_Billing_Type__c, Billing_Type__c, CreatedDate, Client_Name__r.Billing_Schedule_Type__c
+                FROM Billing_Statements__r 
+                WHERE Client_Name__c IN :accountList AND (
+                    (Client_Name__r.ParentId = null AND Client_Name__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_GROUP) OR 
+                    (Client_Name__r.Ultimate_Parent__c = null AND 
+                    Client_Name__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE_GROUP)
+                    OR (Client_Name__r.Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_GROUP AND 
+                    Client_Name__r.Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE_GROUP)) 
+                    AND RecordTypeId = :BillingStatementsConstants.FSW_AUTO_RECORD_TYPE_ID 
+                ORDER BY createdDate DESC 
+                LIMIT 1)
+            FROM Account
+            WHERE Id IN :accountList AND Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_REMIT AND
+                Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE
+        ]);
+    }
+    
+    public Map<Id, Account> getLatestRemitBillingStatementsByAccountIdsAndBillingType(List<Account> accountList, String billingType) {
+        return new Map<Id, Account> ([
+            SELECT Id, 
+                (SELECT Id, Client_Name__c, RecordTypeId, Client_Number__c, Balance_due_this_period__c, Date_Billed__c, Statement_Date__c,
+                    From_Date__c, To_Date__c, Due_Date__c, Payment_Status__c, Previous_Balance__c, Current_Balance__c, 
+                    Account_Billing_Type__c, Billing_Type__c, CreatedDate, Client_Name__r.Billing_Schedule_Type__c
+                FROM Billing_Statements__r 
+                WHERE Client_Name__c IN :accountList AND Billing_Type__c = :billingType AND 
+                    Account_Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_REMIT
+                ORDER BY createdDate DESC 
+                LIMIT 1)
+            FROM Account
+            WHERE Id IN :accountList
+        ]);
+    }
+    
+    public static List<Account> getAccountsByAdminCompanyCodes(Set<String> adminCompanyCodes) {
+        Id recordTypeId = RecordTypeDAO.getRecordTypeId('Non_Dealer','Account');
+        return [
+            SELECT Id, Admin_Company_code__c
+            FROM Account
+            WHERE Admin_Company_code__c in : adminCompanyCodes
+            AND RecordTypeId = :recordTypeId
+            AND Type = :AccountConstants.ADMIN_COMPANY
+        ];
+    }
+
+    public static List<Account> getGeolocationInformationByIds(Set<Id> accountIds)
+    {
+        return [SELECT Id, Billing_Geolocation__c, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode
+            FROM Account
+            WHERE Id IN: accountIds];
+    }    
+    
+    public List<Account> getAutoCheckAccountList(Set<Id> recordTypeIdSet, Set<Id> accountIdSet, String companyName, 
+        List<String> billingTypeSet) {
+        return [
+            SELECT Id, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode, Account_Email__c, Name, 
+                Writing_Company__c, Writing_Company__r.Name, Billing_Type__c
+            FROM Account
+            WHERE Auto_Check__c = true AND Id IN :accountIdSet AND RecordTypeId IN :recordTypeIdSet AND 
+                FF_Company__r.Name = :companyName AND Billing_Type__c IN : billingTypeSet AND ISFSW__C = true
+        ];
+    }
+
+    public static List<Account> getPayeeAccountsBasedOnSearchCriteriaAndRecordTypeId(String accountName, Set<Id> recordTypeIdSet) {
+        return [
+            SELECT Name, Id, FirstName, LastName, Writing_Company__c, BillingStreet, BillingState, BillingCity, BillingCountry,
+                BillingPostalCode, Account_Email__c, Billing_Country__c, RecordTypeId, Site, Accountnumber, Phone,
+                Individual_Case_Payee_Name__c
+            FROM Account
+            WHERE RecordTypeId IN :recordTypeIdSet AND Name LIKE :accountName
+            LIMIT 1000
+        ];
+    }
+    
+    public List<Account> getPayeeAccountsBasedOnSearchCriteriaAndAccountIds(String accountName, Set<Id> accountIdSet) {
+        return [
+            SELECT Name, Id, FirstName, LastName, Writing_Company__c, BillingStreet, BillingState, BillingCity, BillingCountry,
+                BillingPostalCode, Account_Email__c, Billing_Country__c, RecordTypeId, Site, Accountnumber, Phone,
+                Individual_Case_Payee_Name__c
+            FROM Account
+            WHERE Id IN :accountIdSet AND Name LIKE :accountName
+            LIMIT 1000
+        ];
+    }
+    
+    public static List<Account> getExistingPayeeAccountsForThirdPartyCheck(Case_Payee__c casePayee, Set<Id> recordTypeIdSet) {
+        String casePayeeBillingStreet = (casePayee.Individual_Payee_Address_Line_1__c == Null ? '' : casePayee.Individual_Payee_Address_Line_1__c) +
+            (casePayee.Individual_Payee_Address_Line_2__c == Null ? '' : ' '+casePayee.Individual_Payee_Address_Line_2__c);
+        String individualPayeeName = (casePayee.Individual_Payee_First_Name__c == Null ? '' : casePayee.Individual_Payee_First_Name__c) +
+            (casePayee.Individual_Payee_Last_Name__c == Null ? '' : ' '+casePayee.Individual_Payee_Last_Name__c);
+        return [
+            SELECT Id, RecordTypeId, Individual_Case_Payee_Name__c
+            FROM Account
+            WHERE RecordTypeId IN :recordTypeIdSet AND Name = :individualPayeeName.trim()
+                AND BillingCity = :casePayee.Individual_Payee_City__c.trim()
+                AND BillingState = :casePayee.Individual_Payee_State__c.trim() 
+                AND BillingCountry = :casePayee.Individual_Payee_Country__c.trim()
+                AND BillingPostalCode = :casePayee.Individual_Payee_Postal_Code__c.trim() 
+                AND BillingStreet = :casePayeeBillingStreet.trim()
+        ];
+    }
+    
+    public Map<Id, Account> getLatestBillingStatementsIncludingRemitByAccountIds(List<Account> accountList) {
+        return new Map<Id, Account> ([
+            SELECT Id, 
+                (SELECT Id, Client_Name__c, RecordTypeId, Client_Number__c, Balance_due_this_period__c, Date_Billed__c, Statement_Date__c,
+                    From_Date__c, To_Date__c, Due_Date__c, Payment_Status__c, Previous_Balance__c, Current_Balance__c, 
+                    Account_Billing_Type__c, Billing_Type__c, CreatedDate, Client_Name__r.Billing_Schedule_Type__c
+                FROM Billing_Statements__r 
+                WHERE Client_Name__c IN :accountList AND (
+                    (Client_Name__r.ParentId = null AND Client_Name__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_GROUP) OR 
+                    (Client_Name__r.Ultimate_Parent__c = null AND 
+                    Client_Name__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE_GROUP)
+                    OR (Client_Name__r.Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_GROUP AND 
+                    Client_Name__r.Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE_GROUP)) 
+                    AND RecordTypeId = :BillingStatementsConstants.FSW_AUTO_RECORD_TYPE_ID 
+                ORDER BY CreatedDate DESC 
+                LIMIT 1)
+            FROM Account
+            WHERE Id IN :accountList AND Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE
+        ]);
+    }
+
+    public static List<Account> getAllAccountsByName(String accName)
+    {
+        return [SELECT Id, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry
+            FROM Account            
+            WHERE Name LIKE: '%' + accName + '%'
+            LIMIT 500];
+    }
+
+    public List<Account> getAccountsDetailByBillingAddress(String billingStreet, String billingCity, String state,
+        String country, String billingPostalCode){
+        return [
+            SELECT Id, ISFSW__c, Name, BillingStreet, BillingCity, BillingState, BillingCountry,
+                BillingPostalCode, Phone, Company_Email__c, W9_Method__c, Type, Owner.FirstName, Owner.LastName,
+                AccountNumber, Client_Status_Formula__c, Classification_Code__c, W9_On_File__c, Dealer_Billing_Address__c
+            FROM Account
+            WHERE BillingStreet =:billingStreet
+                AND BillingCity =:billingCity
+                AND BillingCountry =:country
+                AND BillingState =:state
+                AND BillingPostalCode =:billingPostalCode
+        ];
+    }
+
+    public static List<Account> getRecentAccountByRecordTypeId(Id recordTypeId){
+        return [SELECT Id, Name, AccountNumber
+                FROM Account
+                WHERE RecordTypeId =: recordTypeId
+                ORDER BY CreatedDate DESC
+                LIMIT 1];
+    }
+    
+    public List<Account> getAccountsByClassificationCodeForFSWNAAuto(Set<String> recordTypeIdSet, String classificationCode, 
+        Integer recordCount, Set<String> billingTypeToExclude) {
+        return [
+            SELECT Id, Name, AccountNumber, Billing_Schedule_Type__c, Billing_Type__c
+            FROM Account
+            WHERE RecordTypeId IN :recordTypeIdSet AND Classification_Code__c = :classificationCode AND ISFSW__c = true AND
+                FF_Company__r.Name = :FF_Company_Name__c.getInstance().NA_BP_Auto_Company_Name__c AND 
+                Billing_Type__c NOT IN :billingTypeToExclude
+            LIMIT :recordCount
+        ];
+    }
+    
+    public List<Account> getPersonAccounts(Id recordTypeId, String companyEmail, String legalName, String bankAccountNumber){
+        return [SELECT Id, Name, LastName, Company_Email__c, Client_Legal_Name__c, 
+                    AccountNumber, Clabe_Number__c, c2g__CODABankAccountNumber__c 
+                FROM Account 
+                WHERE RecordTypeId =:recordTypeId
+                    AND Client_Legal_Name__c =:legalName AND Company_Email__c =:companyEmail AND IsPersonAccount = true
+                    AND c2g__CODABankAccountNumber__c =:bankAccountNumber];
+    }
+    
+    public List<Account> getValidFSWNAAutoAccountBySetofId(Set<String> recordTypeIdSet, Set<String> accountIdSet) {
+        return [
+            SELECT Id, Name, AccountNumber, Billing_Schedule_Type__c, Billing_Type__c
+            FROM Account
+            WHERE Id IN :accountIdSet AND RecordTypeId IN :recordTypeIdSet AND ISFSW__c = true AND
+                FF_Company__r.Name = :FF_Company_Name__c.getInstance().NA_BP_Auto_Company_Name__c
+        ];
+    }
+    
+    public List<Account> getChildAccountForUltimateParentByUltimateParetId(Set<String> recordTypeIdSet, String ultimateParentId) {
+        return [
+            SELECT Id, Name, AccountNumber, Billing_Schedule_Type__c, Billing_Type__c
+            FROM Account
+            WHERE Ultimate_Parent__c = :ultimateParentId AND RecordTypeId IN :recordTypeIdSet AND ISFSW__c = true AND
+                FF_Company__r.Name = :FF_Company_Name__c.getInstance().NA_BP_Auto_Company_Name__c AND 
+                Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE
+        ];
+    }
+    
+    public static List<Account> getAccountDetailsBySetOfNamesAndParentId(Set<String> accountNames, Id recordTypeId, 
+        Set<Id> parentAccountIds) {
+        return [SELECT Id, Name, Billing_Street__c, Billing_Street_2__c, Billing_City__c, State__c, Billing_Zip__c, 
+                    Billing_Country__c, Phone, ParentId
+                FROM Account
+                WHERE Name IN : accountNames 
+                    AND RecordTypeId =: recordTypeId 
+                    AND ParentId IN : parentAccountIds];
+    }
+    
+    public List<Account> getAccountsWithRelatedList(List<Id> accList, String relatedListName){
+        String query = ' Select Id,Name,(Select Id FROM ' +  relatedListName  +
+                       ' ) FROM Account Where Id IN  :  accList';
+        return (List<Account>)Database.query(query);
+    }
+
+    public static List<Account> getRepairFacilityAccountByAccountIds(Set<Id> accountIds, Double searchLocationLatitude, 
+        Double searchLocationLongitude) {
+        return [
+            SELECT Id, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Repair_Type__c, 
+                Billing_GeoLocation__Latitude__s, Billing_GeoLocation__Longitude__s,  
+                Account_Record_Type_Developer_Name__c, Type, Phone, OperatingHoursId, Billing_GeoLocation__c, RecordTypeId 
+            FROM Account
+            WHERE Id IN :accountIds
+            ORDER BY DISTANCE(Billing_GeoLocation__c, GEOLOCATION(:searchLocationLatitude, :searchLocationLongitude), 'mi') ASC
+        ];
+    }
+
+    public static Account getRepairTypesByAccountId(String accountId) {
+        return [
+            SELECT Id, Repair_Type__c, Distribution_List__c 
+            FROM Account
+            WHERE Id = :accountId
+            LIMIT 1
+        ];
+    }
+    
+    public String getCustomerNumberForPersonAccount(Account account) {
+        return Account.Customer_Number__c;
+    }
+    
+    public static List<Account> getLastBillingStatementsByAccountIdSet(Set<Id> clientIdSet) {
+        return [
+            SELECT Id, 
+                (SELECT Id, Client_Name__c, Statement_Id__c, Balance_due_this_period__c
+                FROM Billing_Statements__r 
+                WHERE Client_Name__c IN :clientIdSet
+                ORDER BY createdDate desc 
+                LIMIT 1)
+            FROM Account
+            WHERE Id IN :clientIdSet
+        ];
+    }
+    
+    public List<Account> getPersonAccounts(Set<Id> setOfRecordTypeId, Set<String> setOfCompanyEmail, Set<String> setOfLegalName, 
+        Set<String> setOfBankAccountNumber){
+        return [
+            SELECT Id, Name, LastName, Company_Email__c, Client_Legal_Name__c, AccountNumber, Clabe_Number__c, 
+                c2g__CODABankAccountNumber__c 
+            FROM Account 
+            WHERE RecordTypeId IN :setOfRecordTypeId
+                AND Client_Legal_Name__c IN :setOfLegalName AND Company_Email__c IN :setOfCompanyEmail AND IsPersonAccount = true
+                AND c2g__CODABankAccountNumber__c IN :setOfBankAccountNumber
+        ];
+    }
+    
+    public static List<Database.SaveResult> insertAccounts(List<Account> listOfAccounts, Boolean isAllOrNone){
+        return Database.insert(listOfAccounts, isAllOrNone);
+    }
+    
+    public static List<Database.SaveResult> updateAccounts(List<Account> listOfAccounts, Boolean isAllOrNone){
+        return Database.update(listOfAccounts, isAllOrNone);
+    }
+    
+    public static List<Account> getAccountsByTypeAndParentAffinityIdAndRecordType(Id recordTypeId, String affinityId, 
+        String typeOfAccount) {
+        return [ 
+            SELECT Id, Name, LastName, Company_Email__c
+            FROM Account 
+            WHERE RecordTypeId =: recordTypeId
+                AND Parent.Affinity_Id__c =: affinityId
+                AND Type =: typeOfAccount
+        ];
+    }
+
+    public static Account getPredictionScoreFields(Id accountId)
+    {
+        return [SELECT Id, IsDeleted, RecordTypeId, Unlimited_Prepaid_Maintenance__c, Classification_Code__c, Redemption_Code__c, Name,
+                AccountNumber, Type, BillingStreet, BillingCity, BillingState, BillingPostalCode, CreatedDate,
+                CreatedById, LastModifiedDate, LastModifiedById, SystemModStamp
+            FROM Account
+            WHERE Id = :accountId];
+    }
+
+    public static List<Account> getListOfPersonAccountByContractIdAndRecordTypeId(Set<String> contractId, Id recordTypeId){
+        return [SELECT Id, Contract__c, Is_Primary_Account__c, Customer_Number_Text__c, FirstName, 
+                    MiddleName, LastName, PersonEmail, PersonHomePhone, PersonMobilePhone, Phone, Fax, 
+                    Phone_Type__c, (SELECT Id, Account__c, Address__c, Address_Type_Code__c,
+                                        Address_Line_2__c, City__c, State_Text__c, Country__c, Zip_Code__c, Is_Primary__c 
+                                    FROM Additional_Addresses__r) 
+                FROM Account 
+                WHERE Contract__c =: contractId 
+                AND IsPersonAccount = true
+                AND RecordTypeId =: recordTypeId];
+    }
+    
+    public static List<Account> deleteExistingPersonAccountsByIds(Set<String> accountId){
+        List<Account> listOfAccountsToDelete = [SELECT Id 
+                                                FROM Account 
+                                                WHERE Id IN : accountId];
+        delete listOfAccountsToDelete;
+        return listOfAccountsToDelete;
+    }
+
+    public static Map<Id, Account> getPredictionScoreMap(Set<Id> accountIds)
+    {
+        return new Map<Id, Account>([SELECT Id, IsDeleted, RecordTypeId, Unlimited_Prepaid_Maintenance__c, Classification_Code__c, Redemption_Code__c, Name,
+                AccountNumber, Type, BillingStreet, BillingCity, BillingState, BillingPostalCode, CreatedDate,
+                CreatedById, LastModifiedDate, LastModifiedById, SystemModStamp, Distribution_List__c, ISFSW__c
+            FROM Account
+            WHERE Id IN :accountIds]);
+    }
+    
+    public static List<Account> getLienholderAccountsByNameAndBillingState(String accName, String billingState,
+        Id accountRecordTypeId)
+    {
+        return [
+            SELECT Id, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry
+            FROM Account
+            WHERE RecordType.Id = :accountRecordTypeId AND Name LIKE :accName + '%'
+                AND BillingState = :billingState
+        ];
+    }
+
+    public static List<Account> getSpecialtyVendorsByBusinessTypes(Id recordTypeId, Set<String> businessTypeSet){
+        return [SELECT Id, Name, Type, Billing_Street__c, Billing_Street_2__c, Billing_City__c, Billing_State__c, Billing_Zip__c, 
+                Billing_Country__c, Tax_Id__c
+                FROM Account
+                WHERE RecordTypeId =: recordTypeId AND Type IN :businessTypeSet];
+    }
+    
+    public List<Account> getAccountsByRquestIdAndRecordType(Set<Id> setAccountRequestId, Set<Id> recordTypeSet){
+        return [
+            SELECT Id, Account_Request_Id__c 
+            FROM Account 
+            WHERE Account_Request_Id__c IN : setAccountRequestId 
+                AND recordTypeId IN :recordTypeSet
+        ];
+    }
+    
+    public static Map<Id, Account> getAccountsNameNumberById(Set<Id> accountIds)
+    {
+        return new Map<Id, Account>([SELECT Id, Name, AccountNumber, Freeze_Client_Fees__c FROM Account
+            WHERE Id IN :accountIds]);
+    }
+    
+    public static Map<Id,Account> getFSWNAAutoAccountMapByAccountIdSet(Set<Id> accountIdSet){
+        String naAutoCompanyName = FF_Company_Name__c.getInstance().NA_BP_Auto_Company_Name__c;
+        return new Map<Id,Account>([
+            SELECT Id, Writing_Company__c
+            FROM Account
+            WHERE Id IN : accountIdSet
+            AND ISFSW__c = true AND FF_Company__r.Name = :naAutoCompanyName
+            AND Writing_Company__c != null
+        ]);
+    }
+    
+    public List<Account> getAccountRecordsByFieldName(List<String> fieldNames,
+        String whereClause) {
+        String query = 'SELECT ' + String.join(fieldNames, ',') + ' FROM Account ';
+        if(!String.isBlank(whereClause)) {
+            query += whereClause;
+        }
+        return Database.query(query);
+    }
+    
+    public static List<Account> getAccountByAssociatedAccount(Set<Id> setOfRecordTypeId, Set<Id> setOfAccountId) {
+        return new List<Account>([SELECT Id, Name, AccountNumber FROM Account
+            WHERE recordTypeId IN :setOfRecordTypeId AND Associated_Accounts__c  IN :setOfAccountId LIMIT 1]);
+    }
+
+    public static List<Account> getListOfAssociatedContactAndAgents(Set<Id> setOfAccountId) {
+        return new List<Account>([
+            Select Id, Name, Super_Agent__c, Master_Agent__c, Agent__c, 
+                (Select Id, AccountId from Contacts) from Account where ID in :setOfAccountId
+        ]);
+    }
+    
+    public List<Account> getInvalidAccounts(Set<String> developerNames) {
+        return [
+            SELECT Id,Name,Dealer_Status__c,Default_Payment_Method__c, BillingState, BillingStreet, BillingPostalCode, BillingCountry 
+            FROM Account 
+            WHERE RecordType.DeveloperName IN :developerNames 
+                AND (Default_Payment_Method__c = NULL OR BillingStreet = NULL OR BillingState = NULL OR BillingPostalCode = NULL OR BillingCountry = NULL OR Company_Email__c = NULL) 
+                AND Dealer_Status__c = 'Active'
+                AND Test_Account__c = false
+            ];
+    }
+
+    public List<Account> getAccountsWithAutoPayAgreements(Set<String> developerNames, Set<String> autoPayAgreementDevelopersNames, Set<String> defaultPaymentMethods) {
+        return [
+            SELECT Id,Name,Dealer_Status__c,(SELECT Id, Agreement_Status__c, RecordTypeId, RecordType.DeveloperName 
+            FROM AutoPay_Agreements__r 
+            WHERE RecordType.developerName IN :autoPayAgreementDevelopersNames 
+                AND Agreement_Status__c IN : AutoPayAgreementConstants.VALID_AUTOPAY_AGREEMENT_STATUSES) 
+            FROM Account 
+            WHERE RecordType.DeveloperName IN :developerNames 
+                AND Default_Payment_Method__c IN :defaultPaymentMethods
+                AND Dealer_Status__c = 'Active'
+                AND Test_Account__c = false
+            ];
+    }
+
+    public static List<Account> getAccountsByRecordTypeCompanyEmailAndPostalCode(String companyEmailAddress, 
+        String postalCodeUK, String recordTypeDeveloperName)
+    {
+        return [SELECT Id, Name, Phone, BillingCountry, BillingState, BillingStreet, Labor_Rate__c, Company_Email__c, 
+                    W9_Method__c, Tax_ID_N__c, BillingCity, RecordType.DeveloperName 
+                FROM Account 
+                WHERE Company_Email__c = :companyEmailAddress AND BillingPostalCode = :postalCodeUK AND 
+                    RecordType.DeveloperName = :recordTypeDeveloperName];
+    }
+    
+    public List<Account> getTotalActiveAccounts(){
+        return [select id from account where RecordType.DeveloperName IN (:AccountConstants.RECORD_TYPE_EU_DEALER, :AccountConstants.RECORD_TYPE_EU_DEALER_GROUP) AND Dealer_Status__c = 'Active'];
+    }
+    
+    public static DataBase.QueryLocator getAccountsForRichcoreInvoice(){
+        return DataBase.getQueryLocator([
+            SELECT Id, ParentId
+            FROM Account
+            WHERE ParentId = null and AccountNumber IN :AccountConstants.MX_RICHCORE_INVOICE_ACCOUNTS 
+                AND currencyISOCode = :AccountingActionConstants.CURRENCY_MXN AND Print_Sales_Invoices_Of_DDP__c = true
+                AND BillingCountry = :QuoteConstants.MEXICO_COUNTRY_CODE
+        ]);
+    }
+
+    public static DataBase.QueryLocator getAccountsForRichcoreInvoice(Id accountId){
+        return DataBase.getQueryLocator([
+            SELECT Id, ParentId 
+            FROM Account
+            WHERE Id = :accountId AND currencyISOCode = :AccountingActionConstants.CURRENCY_MXN 
+                AND Print_Sales_Invoices_Of_DDP__c = true AND BillingCountry = :QuoteConstants.MEXICO_COUNTRY_CODE
+        ]);
+    }
+    
+    public Map<Id, Account> getLatestBillingStatementsByBillingStatementIdAndAccountIds(Id billingStatementId, 
+        List<Id> accountList) {
+        return new Map<Id, Account> ([
+            SELECT Id, Auto_Check__c, Billing_Type__c, BillingCountry, AccountNumber, Classification_Code__c, Name, Billing_Statement__c,
+                Writing_Company__c, Billing_Schedule_Type__c, Billing_Statement__r.To_Date__c, Ultimate_Parent__c, BillingStreet, 
+                BillingCity, BillingState, BillingPostalCode, NA_Auto_Business_Type__c, Ultimate_Parent__r.NA_Auto_Business_Type__c,
+                (SELECT Id, Client_Name__c, RecordTypeId, Client_Number__c, Balance_due_this_period__c, Date_Billed__c, Statement_Date__c,
+                    From_Date__c, To_Date__c, Due_Date__c, Payment_Status__c, Previous_Balance__c, Current_Balance__c, 
+                    Account_Billing_Type__c, Billing_Type__c, CreatedDate, Client_Name__r.Billing_Schedule_Type__c
+                FROM Billing_Statements__r 
+                WHERE Client_Name__c IN :accountList AND (
+                    (Client_Name__r.ParentId = null AND Client_Name__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_GROUP) OR 
+                    (Client_Name__r.Ultimate_Parent__c = null AND 
+                    Client_Name__r.Billing_Type__c = :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE_GROUP)
+                    OR (Client_Name__r.Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_GROUP AND 
+                    Client_Name__r.Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE_GROUP)) 
+                    AND RecordTypeId = :BillingStatementsConstants.FSW_AUTO_RECORD_TYPE_ID
+                    AND Id != :billingStatementId
+                ORDER BY createdDate DESC 
+                LIMIT 1)
+            FROM Account
+            WHERE Id IN :accountList AND Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_REMIT AND
+                Billing_Type__c != :AccountConstants.ACCOUNT_BILLING_TYPE_CORPORATE
+        ]);
+    }
+    
+     public static List<Account> getAccountsForMonthlyBilling(Id recordType, String schedule){
+        return [Select id, name, Client_Legal_Name__c 
+        from Account
+        where RecordType.Id = :recordType and Billing_Schedule_Type__c = :schedule and Print_Sales_Invoices_Of_DDP__c = true];
+    }
+    
+    public static List<Account> getAccountWithLatestBSHeaderRecordByAccountIds(Set<String> accountIdSet) {
+        return [
+            SELECT Id, (SELECT Balance_Due_This_Period__c FROM BS_Header_Clients__r ORDER BY CreatedDate DESC LIMIT 1) 
+            FROM Account
+            WHERE Id IN :accountIdSet
+        ];
+    }
+}

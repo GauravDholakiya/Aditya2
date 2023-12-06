@@ -1,0 +1,73 @@
+<template>
+<div class="slds-path">
+  <div class="slds-grid slds-path__track">
+    <div class="slds-grid slds-path__scroller-container">
+      <div class="slds-path__scroller">
+        <div class="slds-path__scroller_inner">
+          <template if:true={boolVisible}>  
+          <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+          <template iterator:ls={list}> 
+            <template if:true={ls.first}>
+           <li class="slds-path__item slds-is-complete" role="presentation" key={ls.value.label}>
+              <a aria-selected="false" class="slds-path__link" href="#"  role="option" tabindex="-1">
+                <span class="slds-path__stage">
+                  <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                  </svg>
+                  <span class="slds-assistive-text">Stage Complete</span>
+                </span>
+                <span class="slds-path__title">{ls.value.Name}</span>
+              </a>
+              
+            </li> 
+            </template>
+            </template>  
+          </ul>
+		  </template>
+      <template if:true={boollst}>  
+          <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+          <template iterator:ls={lst2}> 
+           <li class="slds-path__item slds-is-complete" role="presentation" key={ls.value.label}>
+             
+              <a aria-selected="false" class="slds-path__link" href="#"  role="option" tabindex="-1">
+                <span class="slds-path__stage">
+                  {ls.value.Name}
+                  
+                </span>
+                <span class="slds-path__title">{ls.value.Name}</span>
+              </a>
+              
+            </li> 
+            </template>  
+          </ul>
+		  </template>
+		   <!-- <template if:true={boolVisible}>  
+          <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+          <template for:each={list} for:item="ls"> 
+           <li class="slds-path__item slds-is-complete" role="presentation" key={ls.label}>
+              <a aria-selected="false" class="slds-path__link" href="#"  role="option" tabindex="-1">
+                <span class="slds-path__stage">
+                  <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                  </svg>
+                  <span class="slds-assistive-text">Stage Complete</span>
+                </span>
+                <span class="slds-path__title">{ls.Name}</span>
+              </a>
+            </li> 
+            </template>  
+          </ul>
+		  </template> -->
+        </div>
+      </div>
+    </div>
+    <div class="slds-grid slds-path__action">
+      <span class="slds-path__stage-name">Stage: Unqualified</span>
+      <button class="slds-button slds-button_brand slds-path__mark-complete" onclick={handleClick}>
+        <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+          <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+        </svg>...</button>
+    </div>
+  </div>
+</div>
+</template>

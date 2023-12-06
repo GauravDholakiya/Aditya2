@@ -1,0 +1,82 @@
+<apex:page showHeader="true" sidebar="false" id="page" docType="html-5.0" controller="ChartVfController">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chart.js demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Chart.js Sample</h1>
+
+
+
+   <canvas id="myChart" width="200" height="200"></canvas>
+    <script>
+       var accData = '{!accString}';
+       var accFinalData = JSON.parse(accData);
+       console.log('AccData',accFinalData);
+       var wonData = [];
+       for (var i = 0; i < accFinalData.length; i++) {
+            wonData.push({ x: accFinalData[i].Month__c, y: accFinalData[i].Amount__c });
+       }
+                 
+        var canvasP = document.getElementById("myChart");
+        var ctx= document.getElementById("myChart").getContext("2d");
+        var newChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Scatter Dataset',
+                backgroundColor: 'green',
+                data: wonData
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                     grace: '5%'
+                }
+            }
+        }
+    });
+    canvasP.onclick = function(e) {
+        const points = newChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
+        console.log('activePoint-->',points);
+        let matchedIds = [];
+        for(let i=0; i<points.length;i++){
+                let month = points[i].element.$context.raw.x;
+                let amount = points[i].element.$context.raw.y;
+                let matchedAccData = accFinalData.filter(item => {return item.Month__c == month && item.Amount__c == amount});
+            
+                for(let j=0; j<matchedAccData.length;j++){
+                        matchedIds.push(matchedAccData[j].Id);
+                    }
+            }
+        matchedIds = matchedIds.filter(function(item, pos) {
+            return matchedIds.indexOf(item) == pos;
+        });
+        console.log(matchedIds);
+        for(var k=0;k<matchedIds.length;k++){
+            window.open('/' + matchedIds[k],'_blank');
+        }
+            /*matchedIds.map((item) => {
+            window.open('/' + item,'_blank');
+            window.focus();
+        });*/
+        //window.open('/'+'0012x00000bll1tAAA');
+    };
+    </script>
+ <apex:form >
+Amount Low <apex:inputText value="{!inputText1}"/> 
+Amount High <apex:inputText value="{!inputText2}"/>
+Month Low <apex:inputText value="{!inputText3}"/>    
+Month High <apex:inputText value="{!inputText4}"/>     
+ 
+<apex:commandButton value="Display" action="{!saveTextValue}"/>
+</apex:form>
+</body>       
+</html>
+   
+</apex:page>

@@ -1,0 +1,61 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+    <template> 
+    <div class="slds-form-element" role="group" aria-labelledby="picklist-group-label">
+        <span id="picklist-group-label" class="slds-form-element__label slds-form-element__legend">Select Options</span>
+        <div class="slds-form-element__control">
+          <div class="slds-dueling-list">
+            <div class="slds-assistive-text" id="drag-live-region" aria-live="assertive"></div>
+            <div class="slds-assistive-text" id="option-drag-label">Press space bar when on an item, to move it within the list. Cmd/Ctrl plus left and right arrow keys, to move items between lists.</div>
+            <div class="slds-dueling-list__column">
+              <span class="slds-form-element__label" id="label-107">Available Optiopn</span>
+              <div class="slds-dueling-list__options">
+                <ul aria-describedby="option-drag-label" aria-labelledby="label-107" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                    <template for:each={options} for:item="lang">
+                    <li class="slds-listbox__item" data-value={lang.value} key={lang.value} onclick={handleSelection}>
+                    <div data-val={lang.value} class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline" aria-selected="false" draggable="true" role="option" tabindex="0">
+                      <span class="slds-media__body">
+                        <span class="slds-truncate" title="Option 1">{lang.label}</span>
+                      </span>
+                    </div>
+                  </li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+            <div class="slds-dueling-list__column">
+              <button class="slds-button slds-button_icon slds-button_icon-container" title="Move Selection to Second Category" onclick={handleSelectionChange}>
+                    <lightning-icon icon-name="utility:right" alternative-text="right" title="right"></lightning-icon>
+                <span class="slds-assistive-text">Move Selection to Second Category</span>
+              </button>
+              <button class="slds-button slds-button_icon slds-button_icon-container" title="Move Selection to First Category">
+                    <lightning-icon icon-name="utility:left" alternative-text="left" title="left"></lightning-icon>
+                <span class="slds-assistive-text">Move Selection to First Category</span>
+              </button>
+            </div>
+            <div class="slds-dueling-list__column">
+              <span class="slds-form-element__label" id="label-108">Selected Option</span>
+              <div class="slds-dueling-list__options">
+                <ul aria-describedby="option-drag-label" aria-labelledby="label-108" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                    <template for:each={selected} for:item="sel">
+                    <li class="slds-listbox__item" data-value={sel.value} key={sel.value}>
+                    <div data-val={sel.value} class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline" aria-selected="false" aria-disabled="true" draggable="false" role="option" tabindex="0">
+                      <span class="slds-media__body">
+                        <span class="slds-truncate" title="Option 4">{sel.label}</span>
+                      </span>
+                      <span class="slds-media__figure slds-media__figure_reverse">
+                        <span class="slds-icon_container slds-current-color" title="Locked item">
+                            <lightning-icon icon-name="utility:lock" alternative-text="lock" title="lock" size="xx-small"></lightning-icon>
+                          <span class="slds-assistive-text"> : item cannot be removed from Second Category</span>
+                        </span>
+                      </span>
+                    </div>
+                  </li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>

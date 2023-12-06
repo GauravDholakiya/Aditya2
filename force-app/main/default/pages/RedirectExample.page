@@ -1,0 +1,9 @@
+<apex:page controller="RedirectExample">
+    <apex:form >
+        <apex:pageblock >
+            <apex:commandlink action="{!redirect}" target="_blank">
+                <apex:commandButton value="Open in New Tab"/>
+            </apex:commandLink>
+        </apex:pageblock>
+    </apex:form>
+</apex:page>

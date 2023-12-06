@@ -1,0 +1,44 @@
+<template>
+    <lightning-card title="Opprtunity List" >
+        <div class="slds-p-around_x-small">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Edit">Select</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Opportunity Name">Opportunity Name</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Application Status">Application Status</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Account ID">Account ID</div>
+                        </th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={opps} for:item="opp"> 
+                        <tr key={opp.Id} class="slds-hint-parent">
+                            <td data-label="Prospecting">
+                                <div class="slds-truncate" title="Select">
+                                    <lightning-input type="checkbox-button" label="select" variant="label-hidden" onchange={handleCheck} name={opp.Id}></lightning-input>
+                                </div>
+                            </td>                                
+                            <td data-label="Prospecting">
+                                <div class="slds-truncate" title="Opportunity Name">{opp.Name}</div>
+                            </td>
+                            <td data-label="Confidence">
+                                <div class="slds-truncate" title="Application Status">{opp.Application_Status__c}</div>
+                            </td>
+                            <td data-label="Confidence">
+                                <div class="slds-truncate" title="Account ID">{opp.AccountId}</div>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+</template>

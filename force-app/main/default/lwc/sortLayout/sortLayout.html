@@ -1,0 +1,31 @@
+<template>
+	<lightning-layout class="slds-p-around_small">
+
+		<lightning-layout-item size="7" class="slds-p-right_small" flexibility="auto">
+			<lightning-combobox class="sortFirst arrange" onchange={sortBy} aria-placeholder="choose one..." label="Sort by"
+				value={sortOneValue} options={Options}>
+			</lightning-combobox>
+		</lightning-layout-item>
+		<lightning-layout-item size="2" class="slds-p-top_large slds-p-right_small" flexibility="auto">
+			<lightning-input label=" " class="sortBy" checked={sortByDirection} message-toggle-active="Desc"
+				message-toggle-inactive="Asc" type="toggle" onchange={changeSortDirection} disabled={sortDisabled}>
+			</lightning-input>
+		</lightning-layout-item>
+	</lightning-layout>
+
+	<lightning-layout class="slds-p-around_small">
+
+		<lightning-layout-item size="7" class="slds-p-right_small" flexibility="auto">
+			<lightning-combobox class="groupSecond arrange" onchange={groupAndSortBy} aria-placeholder="choose one..."
+				label="Then by" value={groupTwoValue} options={Options} disabled={selectGroupDisabled}>
+			</lightning-combobox>
+		</lightning-layout-item>
+
+		<lightning-layout-item size="2" class="slds-p-top_large slds-p-right_small" flexibility="auto">
+			<lightning-input label=" " class="groupByD" checked={thenByDirection} message-toggle-active="Desc"
+				message-toggle-inactive="Asc" type="toggle" onchange={groupAndSortBy} disabled={groupDisabled}>
+			</lightning-input>
+		</lightning-layout-item>
+	</lightning-layout>
+
+</template>

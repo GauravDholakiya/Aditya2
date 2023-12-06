@@ -1,0 +1,23 @@
+<template>
+    <lightning-card title="Contacts" icon-name="standard:contact">
+    <lightning-record-edit-form record-id={recordId} object-api-name="Contact"
+            onsuccess={handleSuccess} onsubmit ={handleSubmit}>
+        <lightning-messages>
+        </lightning-messages>
+    
+        <lightning-output-field field-name="AccountId">
+        </lightning-output-field>
+        <label class="slds-form-element__label" for="FName">Contact First Name</label>
+        <lightning-input-field id="FName" field-name="FirstName" variant="label-hidden">
+        </lightning-input-field>
+        <label class="slds-form-element__label" for="LName">Contact Last Name</label>
+        <lightning-input-field id="LName" field-name="LastName" variant="label-hidden">
+        </lightning-input-field>
+        <label class="slds-form-element__label" for="Email">Contact Email</label>
+        <lightning-input-field id="Email" field-name="Email" variant="label-hidden">
+        </lightning-input-field>
+        <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Update">
+        </lightning-button>
+    </lightning-record-edit-form>
+</lightning-card>
+</template>

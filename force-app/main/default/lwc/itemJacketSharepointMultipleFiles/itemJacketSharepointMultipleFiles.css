@@ -1,0 +1,65 @@
+.ProgressBarBG {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  border-radius: 4px;
+  background-color: #ddd;
+}
+
+.ProgressBarText {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  border-radius: 4px;
+  background-color: none;
+  text-align: center;
+  line-height: 30px;
+  color: black;
+}
+
+.ProgressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 30px;
+  border-radius: 4px;
+  background-color: #04aa6d;
+  box-shadow: 0 4px 8px 0 rgba(0, 125, 0, 0.25),
+    0 6px 20px 0 rgba(0, 125, 0, 0.24);
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
+.setFilePropertiesPopup .slds-modal__header {
+  z-index: 1;
+}
+
+.setFilePropertiesPopup .slds-card {
+  padding: 15px;
+}
+
+.slds-modal__container.setFilePropertiesPopup {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 85%;
+  display: inline-block;
+  left: 50%;
+  padding: 0 !important;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.setFilePropertiesPopup .slds-modal__content {
+  overflow: initial;
+  padding: 0px;
+  display: inline-block;
+  width: 100%;
+}
+
+.setFilePropertiesPopup footer.slds-modal__footer {
+  margin-top: -5px;
+}

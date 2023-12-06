@@ -1,0 +1,93 @@
+public class GreenlightReportsController {
+	@testVisible private static Product2DAO.IProduct2DAO product2DAOInstance = new Product2DAO();
+    @testVisible private static CoverageDAO.ICoverageDAO coverageDAOInstance = new CoverageDAO();
+    
+    @AuraEnabled
+    public static Map<String, Map<String, Integer>> getBenefitProducts(Date inputDate){    
+        List<Product2> products = new List<Product2>();
+        products = product2DAOInstance.getProductsForClientAndRecordType(
+            Product2Constants.FSO_PRODUCT2_RECORD_TYPE_ID, CaseConstants.FSO_CLIENT_GREENLIGHT);
+        Date startDate = inputDate.addMonths(-12);
+        startDate = Date.newInstance(startDate.year(), startDate.month(), 1);
+        Date endDate = Date.newInstance(inputDate.year(), inputDate.month(), 1);
+        endDate = endDate.addMonths(1);
+        endDate = endDate.addDays(-1);
+        Map<String, Map<String, Integer>> productActiveAccountMap = new Map<String, Map<String, Integer>>();          
+        Map<String, Date> activeCardNameDateMap = new Map<String, Date>();
+        for(Active_Card_Account_Report__c customSetting : Active_Card_Account_Report__c.getAll().values()){
+            if(customSetting.Client__c == CaseConstants.FSO_CLIENT_GREENLIGHT){
+                activeCardNameDateMap.put(customSetting.Name, customSetting.Effective_Until_Date__c);
+            }
+        }
+        Set<Product2> activeProductSet = new Set<Product2>();
+        for(Product2 prd : products){
+            if(activeCardNameDateMap.containsKey(prd.Name)){
+                activeProductSet.add(prd);
+            }
+        }
+        Id fsoRecordType = RecordTypeDAO.getRecordTypeId('FSO','Coverage__c');
+        List<Coverage__c>  coveredCardAccounts = coverageDAOInstance.getCoveragesByStartDateEndDateAndClient(
+        	startDate, endDate, CaseConstants.FSO_CLIENT_GREENLIGHT, fsoRecordType);  
+       
+        List<String> monthNames = new List<String>{System.Label.January, System.Label.February, System.Label.March, System.Label.April,
+            System.Label.May, System.Label.June, System.Label.July, System.Label.August, System.Label.September, System.Label.October,
+            System.Label.November, System.Label.December};
+        Map<String, Integer>  monthCountMap = new Map<String, Integer>();
+        List<String> productExcludedStates = new List<String>();
+        if(activeProductSet.isEmpty() || coveredCardAccounts.isEmpty()){
+            return null;
+        } 
+        boolean isActive = false;
+        for(Product2 prd : activeProductSet){
+            for(Date tempDate=startDate; tempDate<=endDate; tempDate=tempDate.addMonths(1)){
+                monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(),0);
+            }
+            for(Coverage__c coveredAccount : coveredCardAccounts){
+                Date coverageStartDate = Date.newInstance(coveredAccount.Coverage_Start_Date__c.year(), coveredAccount.Coverage_Start_Date__c.month(), coveredAccount.Coverage_Start_Date__c.day());
+                Date coverageEndDate = Date.newInstance(coveredAccount.Coverage_End_Date__c.year(), coveredAccount.Coverage_End_Date__c.month(), coveredAccount.Coverage_End_Date__c.day());
+                isActive = true;
+                if(coverageStartDate<=activeCardNameDateMap.get(prd.Name)
+                   && coverageEndDate<=activeCardNameDateMap.get(prd.Name)){
+                   isActive = false;
+               	}
+                productExcludedStates = new List<String>();
+                productExcludedStates.addall(prd.Excluded_States__c.split(','));
+                if(startDate<=coverageStartDate && endDate>=coverageEndDate){
+                    if(isActive){
+                        if(productExcludedStates != null && !productExcludedStates.contains(coveredAccount.Card_Account__r.Card_Holder__r.Mailing_State_Province__c)){
+                            for(Date tempDate=coverageStartDate; tempDate<=coverageEndDate; tempDate=tempDate.addMonths(1)){
+                                if(monthCountMap.containsKey(monthNames.get(tempDate.month()-1)+' '+tempDate.year())){
+                                    Integer count = monthCountMap.get(monthNames.get(tempDate.month()-1)+' '+tempDate.year());
+                                    count = count+1;
+                                    monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(), count);
+                                } 
+                            }
+                        }
+                        if(productExcludedStates != null && productExcludedStates.contains(coveredAccount.Card_Account__r.Card_Holder__r.Mailing_State_Province__c)){
+                            for(Date tempDate=coverageStartDate; tempDate<=coverageEndDate; tempDate=tempDate.addMonths(1)){
+                                if(activeCardNameDateMap.get(prd.Name)<=tempDate){
+                                    if(monthCountMap.containsKey(monthNames.get(tempDate.month()-1)+' '+tempDate.year())){
+                                        Integer count = monthCountMap.get(monthNames.get(tempDate.month()-1)+' '+tempDate.year());
+                                        count = count+1;
+                                        monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(), count);
+                                    }
+                                }    
+                            }
+                        }
+                    }
+                    else{
+                        for(Date tempDate=coverageStartDate; tempDate<=coverageEndDate; tempDate=tempDate.addMonths(1)){
+                            if(monthCountMap.containsKey(monthNames.get(tempDate.month()-1)+' '+tempDate.year())){
+                                Integer count = monthCountMap.get(monthNames.get(tempDate.month()-1)+' '+tempDate.year());
+                                count = count+1;
+                                monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(), count);
+                            }
+                        }
+                    }
+                }
+                productActiveAccountMap.put(prd.Name, monthCountMap);
+            }
+        }
+        return productActiveAccountMap;
+    }
+}

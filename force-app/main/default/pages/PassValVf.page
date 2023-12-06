@@ -1,0 +1,7 @@
+<apex:page controller="PassValController">
+    <apex:form >
+    <apex:inputText value="{!val1}" id="val1"/>
+    <apex:inputText value="{!val2}" id="val2"/>
+    <apex:commandButton action="{!onClick}" value="Click"/>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,8 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<aura:attribute name="myBool" type="Boolean" default="true"/>
+	<ui:inputCheckbox aura:id="checkbox" label="Select?" change="{!c.onCheck}"/>
+	<p>Selected:</p>
+	<p><ui:outputText class="result" aura:id="checkResult" value="false" /></p>
+	<p>The following checkbox uses a component attribute to bind its value.</p>
+	<ui:outputCheckbox aura:id="output" value="{!v.myBool}"/>
+</aura:component>

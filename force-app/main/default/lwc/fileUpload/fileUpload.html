@@ -1,0 +1,73 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card title="Upload Files">
+        <div style="margin-left:4%">
+            <div>
+                <lightning-input type="file" 
+                                 label="" 
+                                 onchange={handleFileChanges} 
+                                 multiple>
+                </lightning-input>
+            </div>
+
+            <template if:true={showFilePropertiesModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={handleCloseModal}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                    size="small" onclick={handleCloseModal}></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Set File Properties
+                            </h2>
+                        </header>
+                        <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1"
+                            style="overflow: visible;">
+                            <div class="slds-card slds-var-p-around_small">
+                                <template for:each={filesUploaded} for:item="item" for:index="index">
+                                    <tr key={item.id}>
+                                        <td><lightning-input label="File Name" type="text" value={item.Title}> </lightning-input></td>
+                                    
+                                    
+                                        <td><lightning-combobox name="types" label="Document Type" id={index}
+                                            placeholder="Select File Type" options={documentTypelist.data.values} onchange={handleFileTypeSelectionChange} required>
+                                        </lightning-combobox></td>
+                                    </tr>
+                                </template>
+                                   
+                                
+                            </div>
+        
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick={handleCloseModal} title="Cancel">Cancel</button>
+                            <button class="slds-button slds-button_brand" onclick={handleSaveFiles} title="Upload">Upload</button>
+                        </footer>
+                    </div>
+                </section>
+        
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            
+            <div if:true={fileNames} class="slds-text-body_small slds-text-color_error">{fileNames}
+                <template if:true={showLoadingSpinner}>
+                    <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+                </template>
+            </div><br />
+
+        </div><br />
+        <template if:true={data}>
+            <lightning-card title="Uploaded Files" icon-name="standard:account">
+                <div style="width: auto;">
+                    <lightning-datatable data={data} 
+                                         columns={columns} 
+                                         key-field="id">
+                    </lightning-datatable>
+                </div>
+            </lightning-card>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,88 @@
+public class FSOMonthlyCardCountBatch implements Database.Batchable<sObject>{
+    @testVisible private static Product2DAO.IProduct2DAO product2DAOInstance = new Product2DAO();
+    @testVisible private static CoverageDAO.ICoverageDAO coverageDAOInstance = new CoverageDAO();
+    @testVisible private static CardCountDAO.ICardCountDAO cardCountDAOInstance = new CardCountDAO();
+    @testVisible private static AccountDAO.IAccountDAO accountDAOInstance = new AccountDAO();
+    @testVisible private List<Card_Count__c> cardCountList = new List<Card_Count__c>();
+    @testVisible private static TWGSystemErrorDAO.ITWGSystemErrorDAO twgSystemErrorDAOInstance = new TWGSystemErrorDAO();
+
+    private Date runDate = System.today();
+    public FSOMonthlyCardCountBatch(Date inputDate){
+        if(inputDate != null){
+            runDate = inputDate;
+        }
+    }
+
+    public List<Account> start(Database.BatchableContext batchContext) {
+        List<Account> accounts = new List<Account>();
+        Id recordTypeId = FSOConstants.ACCOUNT_RECORD_TYPE;
+        accounts = accountDAOInstance.getAccountsByRecordTypeIdAndSchedule(recordTypeId,'Monthly');
+        return accounts;        
+    }
+
+    public void execute(Database.BatchableContext batchContext, List<Account> accounts){
+        try{    
+            Account cardAccount = accounts.get(0);
+            Map<String, Integer> stateCountMap = new Map<String, Integer>();
+            Id recordTypeId = CardAccountConstants.FSO_COVERAGE_RECORDTYPE_ID;
+            stateCountMap = CoverageDAO.getStateWiseCardCount(recordTypeId, System.today());
+            List<Product2> products = product2DAOInstance.getProductsForClientAndRecordType(
+                Product2Constants.FSO_PRODUCT2_RECORD_TYPE_ID, cardAccount.Client_Legal_Name__c);
+            system.debug('accounts=='+accounts);
+            system.debug('products=='+products);
+            system.debug('stateCountMap=='+stateCountMap);
+                for(Product2 product : products){
+                    Card_Count__c cardCount = new Card_Count__c();
+                    cardCount.Card_Portfolio__c = product.Card_Portfolio__c;
+                    cardCount.Card_Issuing_Partner__c = product.Card_Issuing_Partner__c;
+                    cardCount.Month__c = runDate;
+                    cardCount.Status__c = FSOConstants.CREATED;
+                    cardCount.RecordTypeId = FSOConstants.CARD_COUNT_RECORD_TYPE;
+                    cardCount.Count__c = getCardCount(stateCountMap, product.Excluded_States__c);
+                    system.debug('product.Excluded_States__c=='+product.Excluded_States__c);
+                    system.debug('cardCount.Count__c=='+cardCount.Count__c);
+                    cardCountList.add(cardCount); 
+                    system.debug('cardCountList=='+cardCountList);
+                }
+                if(cardCountList.size()>0){
+                    system.debug('Inside create cardcount==');
+                    cardCountDAOInstance.insertCardCount(cardCountList); //insert cardCountList here
+                    /*Boolean isExecuting = (([SELECT COUNT() FROM AsyncApexJob WHERE ApexClassId IN 
+(SELECT Id FROM ApexClass 
+WHERE Name in ('FSOMonthlyCarCountBatch'))
+AND Status in ('Queued','Preparing','Processing','Holding')]) == 0) ? false : true;
+
+if(isExecuting){
+System.Debug('error: batch is currently running or queued, so try again shortly.');
+return;
+}else{
+Database.executeBatch(new Batch_DeleteCampaignMembers());
+System.Debug('delete batch class is being triggered');
+}*/
+                }
+            }
+            catch(Exception ex){
+                TWGSystemErrors.insertTwgSystemError(TWGSystemErrors.Application.FSO, null, 'Card_Count__c', false, ex,
+                FSOMonthlyCardCountBatch.Class.getName(), 'execute');
+            }
+    }
+    
+    @testVisible
+    private Integer getCardCount(Map<String, Integer> stateCountMap, String excludedStates){
+        Integer cardCount = 0;
+        List<String> productExcludedStates = new List<String>();
+        if(String.isNotBlank(excludedStates)){
+            productExcludedStates.addall(excludedStates.split(','));
+        }
+        for(String state : stateCountMap.keySet()){
+            if(!productExcludedStates.contains(state)){
+                cardCount += stateCountMap.get(state);
+            }
+        }
+        return cardCount;
+    }
+    
+    public void finish(Database.BatchableContext batchContext) {
+        
+    } 
+}

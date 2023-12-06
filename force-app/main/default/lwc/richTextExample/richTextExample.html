@@ -1,0 +1,25 @@
+<template>
+<lightning-card  variant="Narrow"  title="Chatter" icon-name="standard:live_chat">
+<span onkeypress={keyCheck}>
+<lightning-input-rich-text 
+    value={textValue} 
+    formats={formats} 
+    onchange={handleChange}
+    variant="bottom-toolbar"
+    >
+</lightning-input-rich-text>
+</span>
+<lightning-button 
+    label="Share" 
+    onclick={handleClick}
+    >
+</lightning-button>
+<template if:true={IsShowUser}>
+    <lightning-formatted-text 
+        value={userOrigin}
+        >
+
+    </lightning-formatted-text>
+</template>
+</lightning-card>
+</template>

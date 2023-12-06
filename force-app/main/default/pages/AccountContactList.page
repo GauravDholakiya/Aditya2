@@ -1,0 +1,22 @@
+<apex:page controller="AccountContactOppRelationController">
+<apex:form >
+<apex:pageBlock id="PageBlockSection">
+<apex:pageMessages ></apex:pageMessages>
+
+  <apex:selectList size="1" value="{!selectedAccId}">
+  <apex:actionSupport event="onchange" action="{!conValNew}" reRender="ContactId , PageBlockSection , OppId">
+  </apex:actionSupport>
+          <apex:selectOptions value="{!AccountList}"></apex:selectOptions>
+      </apex:selectList>
+    
+      <apex:selectList size="1" id="ContactId" value="{!selectedConAccId}" rendered="{!ContactListRender}">
+      <apex:actionSupport event="onchange" action="{!OppValNew}" reRender="OppId , PageBlockSection">
+  </apex:actionSupport>
+          <apex:selectOptions value="{!contactlist}"></apex:selectOptions>
+      </apex:selectList>
+      <apex:selectList size="1" id="OppId" rendered="{!OppListRender}">
+          <apex:selectOptions value="{!Opportunitylist}"></apex:selectOptions>
+      </apex:selectList>
+      </apex:pageBlock>
+      </apex:form>
+</apex:page>

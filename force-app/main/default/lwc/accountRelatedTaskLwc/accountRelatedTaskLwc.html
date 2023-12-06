@@ -1,0 +1,65 @@
+<!-- sldsValidatorIgnore -->
+<template>
+   <!-- <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="Example default base table of Opportunities">
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Subject">Subject</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Status">Status</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Due Date">Due Date</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Priority">Priority</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="ContactorLead">Contact/Lead</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Related To">Related To</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Account">Account </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        <template for:each={tasks} for:item="task">
+            <tr class="slds-hint-parent" key={task}>
+                <th data-label="Subject" scope="row">
+                  <div class="slds-truncate" title="Subject">
+                    <a href="#/{task.Id}" target="_blank">{task.Subject}</a>
+                  </div>
+                </th>
+                <td data-label="Status">
+                  <div class="slds-truncate" title="Status">{task.Status}</div>
+                </td>
+                <td data-label="Due Date">
+                  <div class="slds-truncate" title="Date">{task.ActivityDate}</div>
+                </td>
+                <td data-label="Priority">
+                  <div class="slds-truncate" title="Priority">{task.Priority}</div>
+                </td>
+                <td data-label="ContactorLead">
+                  <div class="slds-truncate" title="ContactorLead">{task.Who.Name}</div>
+                </td>
+                <td data-label="Related to">
+                  <div class="slds-truncate" title="Related To">{task.What.Name}</div>
+                </td>
+                <td data-label="Account">
+                  <div class="slds-truncate" title="AccountName">
+                    <a href="#" tabindex="-1">{task.Account.Name}</a>
+                  </div>
+                </td>
+              </tr>
+        </template>
+    </tbody>
+    </table> -->
+    <lightning-card title="Related Task">
+        <lightning-datatable data={tasks} columns={columns} key-field="Id" hide-checkbox-column='true' onclick={handleClick}>
+        </lightning-datatable>
+    </lightning-card> 
+</template>

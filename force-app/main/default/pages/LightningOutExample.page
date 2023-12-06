@@ -1,0 +1,19 @@
+<apex:page >
+    <apex:includeLightning />
+    <div id="lwcDemo" />
+    <script>
+    $Lightning.use("c:dataTableLwcApp", function() {
+        $Lightning.createComponent("c:dataTableLwcExample", {
+        objectName: "Contact"
+        },
+        "lwcDemo",
+            function(component) {
+             console.log("Lightning Web Component created Successfully!!");
+              // extend the functionality as per your requirement
+            }
+       );
+    }               
+                  
+                  );
+    </script>
+</apex:page>

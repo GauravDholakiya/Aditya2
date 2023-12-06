@@ -1,0 +1,93 @@
+public class GreenlightActiveCardsReportController {
+    @testVisible private static CardAccountDAO.ICardAccountDAO cardAccountDAOInstance = new CardAccountDAO();
+    @testVisible private static Product2DAO.IProduct2DAO product2DAOInstance = new Product2DAO();
+    
+    @AuraEnabled
+    //getting a list of products along with the excluded state
+    public static Map<String, Map<String, Integer>> getBenefitProducts(Date inputDate){    
+        List<Product2> products = new List<Product2>();
+        products = product2DAOInstance.getProductsForClientAndRecordType(
+            Product2Constants.FSO_PRODUCT2_RECORD_TYPE_ID, 'Greenlight');
+        
+        Date startDate = inputDate.addMonths(-12);
+        startDate = Date.newInstance(startDate.year(), startDate.month(), 1);
+        Date endDate = Date.newInstance(inputDate.year(), inputDate.month(), 1);
+        endDate = endDate.addMonths(1);
+        endDate = endDate.addDays(-1);
+        Map<String, Map<String, Integer>> productActiveAccountMap = new Map<String, Map<String, Integer>>();
+                
+        Map<String, Date> activeCardNameDateMap = new Map<String, Date>();
+        for(Active_Card_Account_Report__c cardAccount : Active_Card_Account_Report__c.getAll().values()){
+            if(cardAccount.Client__c == 'Greenlight'){
+                activeCardNameDateMap.put(cardAccount.Name, cardAccount.Effective_Until_Date__c);
+            }
+        }
+        Set<Product2> activeProductSet = new Set<Product2>();
+        for(Product2 prd : products){
+            if(activeCardNameDateMap.containsKey(prd.Name)){
+                activeProductSet.add(prd);
+            }
+        }
+        //getting a list of active card accounts through coverage
+        //Question how do i get to know the active accounts for each month
+        List<Coverage__c> coveredCardAccounts = [SELECT Id, Name, Card_Account__r.Id, Card_Account__r.Name, 
+                                                 Card_Account__r.Card_Holder__r.Mailing_State_Province__c,
+                                                 Coverage_Start_Date__c, Coverage_End_Date__c
+                                                 FROM Coverage__c 
+                                                 WHERE isEnrolled__c=true
+                                                 AND Card_Account__r.Client__c = 'Greenlight'
+                                                 AND (Coverage_Start_Date__c>=:startDate OR Coverage_End_Date__c<=:endDate)];
+        
+        List<String> monthNames = new List<String>{'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'};
+            Map<String, Integer>  monthCountMap = new Map<String, Integer>();
+        for(Date tempDate=startDate; tempDate<=endDate; tempDate=tempDate.addMonths(1)){
+            monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(),null);
+        }
+        List<String> productExcludedStates = new List<String>();
+        if(activeProductSet.isEmpty() || coveredCardAccounts.isEmpty()){
+            return null;
+        }
+        
+        boolean isActive = false;
+        for(Product2 prd : activeProductSet){//loop through product
+            for(Date tempDate=startDate; tempDate<=endDate; tempDate=tempDate.addMonths(1)){
+                monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(),0);
+            }
+            for(Coverage__c coveredAccount : coveredCardAccounts){//loop through all the cardaccunt
+                Date coverageStartDate = Date.newInstance(coveredAccount.Coverage_Start_Date__c.year(), coveredAccount.Coverage_Start_Date__c.month(), coveredAccount.Coverage_Start_Date__c.day());
+                Date coverageEndDate = Date.newInstance(coveredAccount.Coverage_End_Date__c.year(), coveredAccount.Coverage_End_Date__c.month(), coveredAccount.Coverage_End_Date__c.day());
+                isActive = false;
+                if(coverageStartDate<=activeCardNameDateMap.get(prd.Name)
+                   && coverageEndDate<=activeCardNameDateMap.get(prd.Name)){
+                       isActive = true;
+                   }
+                productExcludedStates = new List<String>();
+                productExcludedStates.addall(prd.Excluded_States__c.split(','));
+                if(startDate<=coverageStartDate && endDate>=coverageEndDate){
+                    if(isActive){
+                        if(productExcludedStates != null && !productExcludedStates.contains(coveredAccount.Card_Account__r.Card_Holder__r.Mailing_State_Province__c)){
+                            for(Date tempDate=coverageStartDate; tempDate<=coverageEndDate; tempDate=tempDate.addMonths(1)){
+                                if(monthCountMap.containsKey(monthNames.get(tempDate.month()-1)+' '+tempDate.year())){
+                                    Integer count = monthCountMap.get(monthNames.get(tempDate.month()-1)+' '+tempDate.year());
+                                    count = count+1;
+                                    monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(), count);
+                                } 
+                            }
+                        }
+                    }
+                    else{
+                        for(Date tempDate=coverageStartDate; tempDate<=coverageEndDate; tempDate=tempDate.addMonths(1)){
+                            if(monthCountMap.containsKey(monthNames.get(tempDate.month()-1)+' '+tempDate.year())){
+                                Integer count = monthCountMap.get(monthNames.get(tempDate.month()-1)+' '+tempDate.year());
+                                count = count+1;
+                                monthCountMap.put(monthNames.get(tempDate.month()-1)+' '+tempDate.year(), count);
+                            }
+                        }
+                    }
+                }
+                productActiveAccountMap.put(prd.Name, monthCountMap);
+            }
+        }
+        return productActiveAccountMap;
+    }
+}

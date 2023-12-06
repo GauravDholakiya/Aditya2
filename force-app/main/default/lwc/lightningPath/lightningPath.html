@@ -1,0 +1,30 @@
+<template>
+    <div class="slds-path">
+        <div class="slds-grid slds-path__track">
+            <div class="slds-grid slds-path__scroller-container">
+                <div class="slds-path__scroller">
+                    <div class="slds-path__scroller_inner">
+                        <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                            <template for:each={list} for:item="item">
+                                <li key={item.id} class="slds-path__item slds-is-incomplete" role="presentation"
+                                    id={item.id} onclick={pathHandler}>
+                                    <a aria-selected="false" class="slds-path__link" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            {item.label}
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title">{item.label}</span>
+                                    </a>
+                                </li>
+                            </template>
+                            <lightning-button label="..." onclick={showElements} class="slds-var-m-left_x-small"
+                                if:true={showElementsBtn}></lightning-button>
+                         <lightning-button label="..." onclick={showCollapse} class="slds-var-m-left_x-small"
+                                if:true={showCollapseBtn}></lightning-button>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

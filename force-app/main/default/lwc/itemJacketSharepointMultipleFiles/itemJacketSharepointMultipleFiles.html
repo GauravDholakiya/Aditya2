@@ -1,0 +1,648 @@
+<template>
+  <lightning-record-form object-api-name="Item_Jacket__c" record-id={recordId}>
+  </lightning-record-form>
+
+  <template if:true={hasReadAccess}>
+    <lightning-card title="Item Jacket SharePoint Files">
+      <!-- File Upload Section Start-->
+      <div class="slds-align_absolute-center slds-p-bottom_medium">
+        <template if:true={hasEditAccess}>
+          <form id="fileUploadForm">
+            <div class="slds-form-element slds-align_absolute-center">
+              <span
+                class="slds-form-element__label"
+                id="file-selector-primary-label"
+              ></span>
+              <div class="slds-form-element__control">
+                <div class="slds-file-selector slds-file-selector_files">
+                  <div
+                    class="slds-file-selector__dropzone slds-has-drag-over slds-grid slds-wrap"
+                    ondrop={dropHandler}
+                    ondragover={dragOverHandler}
+                  >
+                    <table>
+                      <tr>
+                        <td>
+                          <div class="slds-m-around_xx-small">
+                            <!-- File Selector Control -->
+                            <input
+                              type="file"
+                              class="slds-file-selector__input slds-assistive-text slds-size_12-of-12"
+                              onchange={selectFile}
+                              id="file-upload-input-01"
+                              data-id="fileUpload"
+                              aria-labelledby="file-selector-primary-label file-selector-secondary-label"
+                              multiple
+                            />
+                            <label
+                              class="slds-file-selector__body"
+                              for="file-upload-input-01"
+                              id="file-selector-secondary-label"
+                            >
+                              <span
+                                class="slds-file-selector__button slds-button slds-button_neutral"
+                              >
+                                Upload File(s)</span
+                              >
+                            </label>
+                          </div>
+                        </td>
+                        <!-- 
+                                                    Drop region
+                                                    Note: The whole form supports drag-drop functionality as a region, but here lies the visible region designated for drop
+                                                -->
+                        <td rowspan="2">
+                          <div class="slds-m-around_xx-small">or Drop Here</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="slds-m-around_xx-small">
+                            <!-- Folder Selector Control -->
+                            <input
+                              type="file"
+                              class="slds-file-selector__input slds-assistive-text slds-size_12-of-12"
+                              onchange={selectFolder}
+                              id="file-upload-input-02"
+                              data-id="folderUpload"
+                              aria-labelledby="folder-selector-primary-label folder-selector-secondary-label"
+                              webkitdirectory
+                              mozdirectory
+                            />
+                            <label
+                              class="slds-file-selector__body"
+                              for="file-upload-input-02"
+                              id="folder-selector-secondary-label"
+                            >
+                              <span
+                                class="slds-file-selector__button slds-button slds-button_neutral"
+                              >
+                                Upload Folder</span
+                              >
+                            </label>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </template>
+      </div>
+      <!-- 
+                SharePoint Files List Section: 
+                All documents loaded from SharePoint will be shown here 
+                Alternatively, if no files are present, similar message will reflect such
+            -->
+      <table
+        class="slds-table slds-table_bordered"
+        style="table-layout: fixed; width: 100%"
+      >
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th class="slds-cell-wrap" scope="col" style="width: 40%">Name</th>
+            <th class="slds-cell-wrap" scope="col" style="width: 20%">
+              Document Type
+            </th>
+            <th class="slds-cell-wrap" scope="col" style="width: 13%">
+              Modified
+            </th>
+            <th class="slds-cell-wrap" scope="col" style="width: 20%">
+              Modified By
+            </th>
+            <th scope="col" style="width: 7%"></th>
+          </tr>
+        </thead>
+        <template if:true={documentDetail}>
+          <tbody>
+            <template for:each={allDocuments} for:item="doc">
+              <tr key={doc.Name} class="slds-line-height_reset">
+                <td class="slds-cell-wrap">
+                  <a href={doc.fileLink} target="_blank">{doc.Name}</a>
+                </td>
+                <td class="slds-cell-wrap">{doc.Type}</td>
+                <td class="slds-cell-wrap">{doc.Modified}</td>
+                <td class="slds-cell-wrap">{doc.EditorName}</td>
+                <template if:true={hasEditAccess}>
+                  <td>
+                    <lightning-button-icon
+                      variant="bare"
+                      icon-name="utility:delete"
+                      alternative-text="Delete"
+                      class="slds-m-left_xx-small"
+                      title="Delete"
+                      onclick={handledeleteFileFromSP}
+                      name="openConfirmation"
+                      data-id={doc.id}
+                    >
+                    </lightning-button-icon>
+                  </td>
+                </template>
+              </tr>
+            </template>
+          </tbody>
+        </template>
+      </table>
+      <!-- Loading message -->
+      <template if:true={showLoadingMessage}>
+        <p class="slds-p-horizontal_large">
+          <lightning-formatted-text
+            value="Files loading..."
+          ></lightning-formatted-text>
+        </p>
+      </template>
+      <!-- Message if no documents found in SharePoint -->
+      <template if:true={showNoDocuments}>
+        <p class="slds-p-horizontal_large">
+          <lightning-formatted-text
+            value="No files found on SharePoint."
+          ></lightning-formatted-text>
+        </p>
+      </template>
+      <!-- Files Uploading message -->
+      <template if:true={showIsUploading}>
+        <p class="slds-p-horizontal_large">
+          <lightning-formatted-text
+            value="File upload processing..."
+          ></lightning-formatted-text>
+        </p>
+      </template>
+      <!-- Error message: During initial file list load -->
+      <template if:true={errorWhileGettingFiles}>
+        <p class="slds-p-horizontal_large">
+          <lightning-formatted-text
+            class="slds-text-color_error"
+            value="Error while getting files from SharePoint."
+          ></lightning-formatted-text>
+        </p>
+      </template>
+    </lightning-card>
+  </template>
+  <!-- File Upload Section End-->
+
+  <template if:true={displayAccessMessage}>
+    <lightning-card title="Files">
+      <p class="slds-p-horizontal_large">
+        <lightning-formatted-text
+          value="You can't access this component. Contact your Salesforce admin for help."
+        >
+        </lightning-formatted-text>
+      </p>
+    </lightning-card>
+  </template>
+
+  <template if:true={showSpinner}>
+    <div class="demo-only">
+      <div
+        class="slds-spinner_container"
+        style="
+          position: fixed;
+          z-index: 9999999;
+          background-color: rgba(0, 0, 0, 0.4);
+        "
+      >
+        <div
+          role="status"
+          class="slds-spinner slds-spinner_medium slds-spinner_inverse"
+        >
+          <span class="slds-assistive-text">Loading</span>
+          <div class="slds-spinner__dot-a"></div>
+          <div class="slds-spinner__dot-b"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Modal for new files being uploaded -->
+  <template if:true={showFilePropertiesModal}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="modal-heading-01"
+      aria-modal="true"
+      aria-describedby="modal-content-id-1"
+      class="slds-modal slds-fade-in-open"
+    >
+      <div class="slds-modal__container setFilePropertiesPopup">
+        <header class="slds-modal__header">
+          <button
+            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+            title="Close"
+            onclick={closeFilePropertiesModal}
+          >
+            <lightning-icon
+              icon-name="utility:close"
+              alternative-text="close"
+              variant="inverse"
+              size="small"
+              onclick={closeFilePropertiesModal}
+            ></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2
+            id="modal-heading-01"
+            class="slds-text-heading_medium slds-hyphenate"
+          >
+            Set File Properties
+          </h2>
+        </header>
+        <div
+          class="slds-modal__content slds-var-p-around_medium"
+          id="modal-content-id-1"
+        >
+          <div class="slds-card slds-var-p-around_small">
+            <template if:true={displayFilePropertiesModalError}>
+              <p class="slds-text-color_error">{filePropertiesModalEM}</p>
+            </template>
+            <template if:true={showDocumentPropertiesForm}>
+              <!-- Removing checkbox column on new files? -->
+              <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                  <lightning-input
+                    type="checkbox"
+                    onchange={handleSelectAllDocumentTypeChk}
+                    label="Select All"
+                    data-id="selectAllDocumentType"
+                  ></lightning-input>
+                </div>
+              </div>
+              <template for:each={newFiles} for:item="file" for:index="index">
+                <div class="slds-grid slds-gutters" key={file.name}>
+                  <div class="slds-col slds-m-top_large slds-size_1-of-7">
+                    <lightning-input
+                      type="checkbox"
+                      name={file.name}
+                      data-class="cus_DocTypeHelper"
+                      onchange={handleDocumentTypeCheckbox}
+                      data-id="documentTypeChk"
+                    >
+                    </lightning-input>
+                  </div>
+
+                  <div class="slds-col slds-size_3-of-7">
+                    <!--<div class='slds-col slds-size_1-of-2'>-->
+                    <lightning-input
+                      label="File Name"
+                      type="text"
+                      value={file.name}
+                      disabled="true"
+                    >
+                    </lightning-input>
+                  </div>
+                  <div class="slds-col slds-size_3-of-7">
+                    <!--<div class='slds-col slds-size_1-of-2'>-->
+                    <lightning-combobox
+                      name={file.name}
+                      label="Document Type"
+                      data-id={file.name}
+                      class="picklistContent"
+                      value={file.documentType}
+                      dropdown-alignment="auto"
+                      placeholder="Select File Type"
+                      options={options}
+                      onchange={handleFileTypeSelectionChange}
+                      required
+                    >
+                    </lightning-combobox>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+        </div>
+        <footer class="slds-modal__footer">
+          <!--<template if:false={isCheckingFileExists}>-->
+          <button
+            class="slds-button slds-button_neutral"
+            onclick={closeFilePropertiesModal}
+            title="Cancel"
+          >
+            Cancel
+          </button>
+          <button
+            class="slds-button slds-button_brand"
+            onclick={handleFileUploadToSharePoint}
+            title="Upload"
+          >
+            Upload
+          </button>
+          <!--</template>-->
+        </footer>
+      </div>
+    </section>
+
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <template if:true={isCheckingFileExists}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="modal-heading-01"
+      aria-modal="true"
+      aria-describedby="modal-content-id-1"
+      class="slds-modal slds-fade-in-open"
+    >
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <h2
+            id="modal-heading-02"
+            class="slds-text-heading_medium slds-hyphenate"
+          >
+            Checking Existing Files
+          </h2>
+        </header>
+        <div
+          class="slds-modal__content slds-var-p-around_medium"
+          id="modal-content-id-2"
+        >
+          <div class="slds-card slds-var-p-around_small">
+            <h2 class="slds-text-heading_medium slds-hyphenate">
+              Checking if the file already exists...
+            </h2>
+          </div>
+        </div>
+        <footer class="slds-modal__footer"></footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Modal for client-side validation errors -->
+  <template if:true={showErrorModal}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="modal-heading-01"
+      aria-modal="true"
+      aria-describedby="modal-content-id-1"
+      class="slds-modal slds-fade-in-open"
+    >
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <lightning-button-icon
+            class="slds-modal__close"
+            title="Close"
+            icon-name="utility:close"
+            icon-class="slds-button_icon-inverse"
+            onclick={closeErrorModal}
+          >
+          </lightning-button-icon>
+          <h2 class="slds-modal__title slds-hyphenate">Error!</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <p class="slds-text-color_error">{errorModalEM}</p>
+          <!-- Display for error files -->
+          <template if:true={displayErrorFiles}>
+            <table
+              class="slds-table slds-table_cell-buffer slds-table_bordered"
+            >
+              <thead>
+                <tr class="slds-line-height_reset">
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="File Name">File Name</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={error.files} for:item="file">
+                  <tr class="slds-hint-parent" key={file}>
+                    <th data-label="File Name" scope="row">
+                      <div class="slds-truncate">{file}</div>
+                    </th>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </template>
+        </div>
+        <footer class="slds-modal__footer">
+          <lightning-button
+            class="slds-button"
+            label="OK"
+            onclick={closeErrorModal}
+          >
+          </lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Modal for overwriting files -->
+  <template if:true={showOverWriteModal}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="modal-heading-01"
+      aria-modal="true"
+      aria-describedby="modal-content-id-1"
+      class="slds-modal slds-fade-in-open"
+    >
+      <div class="slds-modal__container setFilePropertiesPopup">
+        <header class="slds-modal__header">
+          <lightning-button-icon
+            class="slds-modal__close"
+            title="Close"
+            icon-name="utility:close"
+            icon-class="slds-button_icon-inverse"
+            onclick={closeOverWriteModal}
+          >
+          </lightning-button-icon>
+          <h2 class="slds-modal__title slds-hyphenate">
+            Do you want to overwrite below files?
+          </h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <!-- Help text
+                    <p>Use checkboxes to select all or multiple files to update overwrite to yes or no.</p> 
+                    -->
+          <!--<p class="slds-text-color_error">{overWriteModalError}</p>-->
+          <div class="slds-card slds-var-p-around_small">
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col">
+                <lightning-input
+                  type="checkbox"
+                  onchange={handleSelectAllDocumentTypeChkOverWrite}
+                  label="Select All"
+                  data-id="selectAllDocumentTypeOverwrite"
+                ></lightning-input>
+              </div>
+            </div>
+            <template
+              for:each={existingFiles}
+              for:item="file"
+              for:index="index"
+            >
+              <div class="slds-grid slds-gutters" key={file.name}>
+                <div class="slds-col slds-m-top_large slds-size_1-of-7">
+                  <lightning-input
+                    type="checkbox"
+                    name={file.name}
+                    data-class="cusOver_DocTypeHelper"
+                    onchange={handleDocumentTypeCheckboxOverWrite}
+                    data-id="documentTypeChkOverWrite"
+                  >
+                  </lightning-input>
+                </div>
+                <div class="slds-col slds-size_2-of-7">
+                  <lightning-input
+                    label="File Name"
+                    type="text"
+                    value={file.name}
+                    disabled="true"
+                  >
+                  </lightning-input>
+                </div>
+                <div class="slds-col slds-size_2-of-7">
+                  <lightning-input
+                    label="Document Type"
+                    type="text"
+                    value={file.documentType}
+                    disabled="true"
+                  >
+                  </lightning-input>
+                </div>
+                <div class="slds-col slds-size_2-of-7">
+                  <lightning-combobox
+                    name={file.name}
+                    label="Overwrite"
+                    value="Yes"
+                    placeholder="Do you want to overwrite?"
+                    data-id={file.name}
+                    options={overWriteOptions}
+                    onchange={handleOverWriteProperty}
+                    if:true={file.isExist}
+                  >
+                  </lightning-combobox>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+        <footer class="slds-modal__footer">
+          <lightning-button
+            class="slds-button"
+            label="Cancel"
+            onclick={closeOverWriteModal}
+          >
+          </lightning-button>
+          <lightning-button
+            class="slds-button"
+            variant="brand"
+            label="Continue"
+            onclick={saveOverWriteModalProperties}
+          >
+          </lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <template if:true={showProgressBarModal}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="modal-heading-01"
+      aria-modal="true"
+      aria-describedby="modal-content-id-1"
+      class="slds-modal slds-fade-in-open"
+    >
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <lightning-button-icon
+            class="slds-modal__close"
+            title="Close"
+            icon-name="utility:close"
+            icon-class="slds-button_icon-inverse"
+            onclick={closeProgressBarModal}
+          >
+          </lightning-button-icon>
+          <h2 class="slds-modal__title slds-hyphenate">File(s) upload</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <p class="slds-text-color_error">{progressBarModalError}</p>
+          <template if:true={displaySizeExceededFiles}>
+            <table
+              class="slds-table slds-table_cell-buffer slds-table_bordered"
+            >
+              <thead>
+                <tr class="slds-line-height_reset">
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="File Name">File Name</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={fileSizeExceeded} for:item="file">
+                  <tr class="slds-hint-parent" key={file}>
+                    <th data-label="File Name" scope="row">
+                      <div class="slds-truncate">{file}</div>
+                    </th>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </template>
+          <template if:true={filesFailed}>
+            <p class="slds-text-color_error">{permanentlyFailedEM}</p>
+            <table
+              class="slds-table slds-table_cell-buffer slds-table_bordered"
+            >
+              <thead>
+                <tr class="slds-line-height_reset">
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="File Name">File Name</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={failedFiles} for:item="file">
+                  <tr class="slds-hint-parent" key={file.name}>
+                    <th data-label="File Name" scope="row">
+                      <div class="slds-truncate">{file.name}</div>
+                    </th>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </template>
+          <div class="slds-card slds-var-p-around_small">
+            <div class="ProgressBarBG">
+              <div
+                class="progress-bar"
+                data-id="ProgressBar"
+                lwc:dom="manual"
+              ></div>
+              <div class="ProgressBarText" data-id="ProgressBarText"></div>
+            </div>
+          </div>
+        </div>
+        <footer class="slds-modal__footer">
+          <lightning-button
+            class="slds-button"
+            label="OK"
+            onclick={closeProgressBarModal}
+          >
+          </lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <c-confirmationdialogbox
+    title="Confirmation for Delete"
+    message="Are you sure you want to delete?"
+    confirm-label="Delete"
+    cancel-label="Cancel"
+    visible={isConfirmationDialogVisible}
+    original-message={originalMessage}
+    name="confirmModal"
+    onconfirmclick={handledeleteFileFromSP}
+  >
+  </c-confirmationdialogbox>
+</template>

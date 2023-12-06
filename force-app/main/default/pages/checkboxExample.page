@@ -1,0 +1,12 @@
+<apex:page controller="CheckboxRerenderController">
+    <apex:form >
+    <apex:inputCheckbox value="{!Ischeck}">
+        <apex:actionSupport event="onchange" rerender="thePanel"/>
+    </apex:inputCheckbox>
+        <apex:outputPanel id="thePanel">
+           <div style="{!IF( Ischeck,'display:block', 'display:none')}">
+               Hello Im checked {!displayInputputText}
+            </div> 
+        </apex:outputPanel>
+        </apex:form>
+</apex:page>

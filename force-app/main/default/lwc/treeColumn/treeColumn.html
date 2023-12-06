@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title="Part PicklistValues">
+            <template if:true={partMaterialPicklist.data}>
+                <lightning-combobox name="Material Type"
+                                    label="Material Type"
+                                    value={MaterialValue}
+                                    placeholder="-Select-"
+                                    options={partMaterialPicklist.data.values}
+                                    onchange={handleChange} >
+                </lightning-combobox>
+          </template>
+          <template if:true={partConditionPicklist.data}>
+                <lightning-combobox name="Condition"
+                                    label="Condition"
+                                    value={ConditionValue}
+                                    placeholder="-Select-"
+                                    options={partConditionPicklist.data.values}
+                                    onchange={handleChange} >
+                </lightning-combobox>
+          </template>
+    </lightning-card>
+    </template>

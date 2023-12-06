@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="Product - Lightning Web Component" icon-name="custom:custom63">
+        <lightning-combobox
+            name="Product Type"
+            label="Product Type"
+            placeholder="Choose Product Type"
+            value={valueType}
+            onchange={handleTypeChange}
+            options={productTypeOptions}>
+        </lightning-combobox>
+
+        <lightning-combobox
+            name="Product Category"
+            label="Product Category"
+            placeholder="Choose Product Category"
+            value={valueCategory}
+            onchange={handleCategoryChange}
+            options={productCategoryOptions}>
+        </lightning-combobox>
+
+
+    </lightning-card>
+    
+</template>

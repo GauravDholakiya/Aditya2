@@ -1,0 +1,21 @@
+<template>
+	<!-- sorting Tabs -->
+	<lightning-tabset>
+		<lightning-tab label="Item One">
+			<lightning-card>
+				<c-sort-layout initial-data={initialData} onsort={handleSort}>
+				</c-sort-layout>
+			</lightning-card>
+		</lightning-tab>
+		<template if:true={showTabTwo}>
+			<lightning-tab label="Item Two">
+				Content for tab 2
+			</lightning-tab>
+		</template>
+	</lightning-tabset>
+	<!-- Table to be sorted  -->
+	<div style="height: 300px;">
+		<lightning-datatable key-field="status" data={tableData} columns={columns}>
+		</lightning-datatable>
+	</div>
+</template>

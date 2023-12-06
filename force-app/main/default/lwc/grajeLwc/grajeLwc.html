@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="Garage LWC Week 10">
+        <lightning-layout>
+            <lightning-messages></lightning-messages>
+            <lightning-input class="slds-p-around_medium" label="Make"  type="string" name="Make" onchange={makeChangedHandler}> </lightning-input>
+            <lightning-input class="slds-p-around_medium" label="Model" type="string" name="Model" onchange={modelChangedHandler}> </lightning-input>
+            <lightning-input class="slds-p-around_medium" label="Year" type="date" name="Year" onchange={yearChangedHandler}> </lightning-input>
+           
+        </lightning-layout>
+         <lightning-button class="slds-m-left_x-small" label="Display" variant="brand" onclick={handleClick} rerender="datatable">
+
+            </lightning-button>
+            <lightning-datatable
+            key-field="id"
+            data={data}
+            columns={columns}>
+    </lightning-datatable>
+                        
+    </lightning-card>  
+</template>
